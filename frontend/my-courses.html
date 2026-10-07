@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - My Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 22px;
+        }
+
+        .add-box {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .add-box label {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .add-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .add-row select {
+            flex: 1;
+            height: 44px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            padding-left: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #13295b;
+            background-color: white;
+        }
+
+        .add-btn {
+            height: 44px;
+            padding: 0 20px;
+            background-color: #2452a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background-color: #1c4390;
+        }
+
+        #error {
+            font-size: 12px;
+            color: #c0392b;
+            margin-bottom: 0;
+        }
+
+        .section-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 26px;
+            margin-bottom: 14px;
+        }
+
+        .section-top h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .section-top span {
+            font-size: 11px;
+            color: #6b7386;
+        }
+
+        .course-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .course-card {
+            width: calc(33.33% - 11px);
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-top: 4px solid #2452a6;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .course-card.green {
+            border-top-color: #1f7a57;
+        }
+
+        .course-card.purple {
+            border-top-color: #7b5bd6;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            min-height: 80px;
+        }
+
+        .code {
+            font-size: 11px;
+            font-weight: 700;
+            color: #2452a6;
+        }
+
+        .green .code {
+            color: #1f7a57;
+        }
+
+        .purple .code {
+            color: #7b5bd6;
+        }
+
+        .course-card h3 {
+            font-size: 18px;
+            margin: 4px 0 0 0;
+        }
+
+        .remove-btn {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            background-color: #fdeaea;
+            color: #c0392b;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e4e7ee;
+            padding-top: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background-color: #2452a6;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .find-btn {
+            padding: 8px 12px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            color: #2452a6;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .find-btn:hover {
+            border-color: #2452a6;
+        }
+
+        .tip {
+            display: flex;
+            align-items: center;
+            background-color: #dff7ef;
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .tip-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 14px;
+            text-align: center;
+            line-height: 32px;
+        }
+
+        .tip p {
+            margin: 3px 0 0 0;
+            color: #2c5a52;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .course-card {
+                width: 100%;
+            }
+            .add-row {
+                display: block;
+            }
+            .add-row select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html" class="active">My Courses</a>
+            <a href="find-groups.html">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                Dion Chen &middot; Computer Science
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1>My Courses</h1>
+            <p class="subtitle">Keep your course list current to receive better group recommendations.</p>
+
+            <div class="add-box">
+                <label for="courseSelect">Add a course</label>
+                <div class="add-row">
+                    <select id="courseSelect">
+                        <option value="">Search and select an SDSU CS course</option>
+                        <option value="CS 370|Computer Architecture">CS 370 Computer Architecture</option>
+                        <option value="CS 420|Advanced Programming Languages">CS 420 Advanced Programming Languages</option>
+                        <option value="CS 450|Introduction to Artificial Intelligence">CS 450 Introduction to Artificial Intelligence</option>
+                        <option value="CS 460|Algorithms">CS 460 Algorithms</option>
+                        <option value="CS 480|Operating Systems">CS 480 Operating Systems</option>
+                        <option value="CS 514|Database Theory and Implementation">CS 514 Database Theory and Implementation</option>
+                        <option value="CS 576|Computer Networks and Distributed Systems">CS 576 Computer Networks and Distributed Systems</option>
+                    </select>
+                    <button class="add-btn" onclick="addCourse()">+ &nbsp;Add Course</button>
+                </div>
+                <p id="error"></p>
+            </div>
+
+            <div class="section-top">
+                <h2>Current courses</h2>
+                <span id="count">3 courses</span>
+            </div>
+
+            <!-- hardcoded for now, later these come from the Enrollments table -->
+            <div class="course-list" id="courseList">
+                <div class="course-card">
+                    <div class="card-top">
+                        <div>
+                            <span class="code">CS 576</span>
+                            <h3>Computer Networks and Distributed Systems</h3>
+                        </div>
+                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
+                    </div>
+                    <div class="card-bottom">
+                        <span><span class="dot"></span>4 matching groups</span>
+                        <a href="find-groups.html" class="find-btn">Find Groups</a>
+                    </div>
+                </div>
+                <div class="course-card green">
+                    <div class="card-top">
+                        <div>
+                            <span class="code">CS 450</span>
+                            <h3>Introduction to Artificial Intelligence</h3>
+                        </div>
+                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
+                    </div>
+                    <div class="card-bottom">
+                        <span><span class="dot"></span>3 matching groups</span>
+                        <a href="find-groups.html" class="find-btn">Find Groups</a>
+                    </div>
+                </div>
+                <div class="course-card purple">
+                    <div class="card-top">
+                        <div>
+                            <span class="code">CS 370</span>
+                            <h3>Computer Architecture</h3>
+                        </div>
+                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
+                    </div>
+                    <div class="card-bottom">
+                        <span><span class="dot"></span>6 matching groups</span>
+                        <a href="find-groups.html" class="find-btn">Find Groups</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip">
+                <div class="tip-icon">&#10022;</div>
+                <div>
+                    <b>Tip: add every course you want study support for</b>
+                    <p>We'll use your list to surface compatible groups without sharing your schedule.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var colors = ["", "green", "purple"];
+
+        function updateCount() {
+            var total = document.getElementsByClassName("course-card").length;
+            if (total == 1) {
+                document.getElementById("count").innerText = "1 course";
+            } else {
+                document.getElementById("count").innerText = total + " courses";
+            }
+        }
+
+        function addCourse() {
+            var select = document.getElementById("courseSelect");
+            var error = document.getElementById("error");
+            error.innerText = "";
+
+            if (select.value == "") {
+                error.innerText = "Pick a course first";
+                return;
+            }
+
+            var parts = select.value.split("|");
+            var code = parts[0];
+            var name = parts[1];
+
+            // dont let them add the same course twice
+            var codes = document.getElementsByClassName("code");
+            for (var i = 0; i < codes.length; i++) {
+                if (codes[i].innerText == code) {
+                    error.innerText = "You already added " + code;
+                    return;
+                }
+            }
+
+            var list = document.getElementById("courseList");
+            var color = colors[list.children.length % 3];
+
+            var card = document.createElement("div");
+            card.className = "course-card " + color;
+            card.innerHTML =
+                '<div class="card-top">' +
+                    '<div><span class="code">' + code + '</span><h3>' + name + '</h3></div>' +
+                    '<button class="remove-btn" onclick="removeCourse(this)">&times;</button>' +
+                '</div>' +
+                '<div class="card-bottom">' +
+                    '<span><span class="dot"></span>0 matching groups</span>' +
+                    '<a href="find-groups.html" class="find-btn">Find Groups</a>' +
+                '</div>';
+            list.appendChild(card);
+
+            select.value = "";
+            updateCount();
+            // TODO: save to the backend when its ready
+        }
+
+        function removeCourse(btn) {
+            btn.parentElement.parentElement.remove();
+            updateCount();
+            // TODO: delete from the backend too
+        }
+    </script>
+</body>
+</html>
