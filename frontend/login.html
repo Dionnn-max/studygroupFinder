@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left-side {
+            width: 58%;
+            background-color: #faf8f6;
+            padding: 72px;
+        }
+
+        .right-side {
+            width: 42%;
+            background-color: #13295b;
+            background-image: url("images/login-photo.jpg");
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 46px;
+            font-weight: 800;
+            margin-top: 40px;
+            margin-bottom: 0;
+        }
+
+        .login-box {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 6px;
+            max-width: 520px;
+            padding: 40px;
+            margin: 90px auto 0 auto;
+        }
+
+        .login-box h2 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 24px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .input-box {
+            position: relative;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .input-box span {
+            position: absolute;
+            left: 14px;
+            top: 13px;
+            font-size: 13px;
+            color: #8a93a6;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #cfd6e4;
+            border-radius: 6px;
+            padding-left: 40px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .remember-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .remember-row label {
+            font-weight: 500;
+        }
+
+        .remember-row input {
+            accent-color: #2452a6;
+            margin-right: 6px;
+        }
+
+        a {
+            color: #2452a6;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 48px;
+            background-color: #2452a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background-color: #1c4390;
+        }
+
+        .or {
+            text-align: center;
+            font-size: 10px;
+            color: #6b7386;
+            border-top: 1px solid #e4e7ee;
+            margin-top: 28px;
+            margin-bottom: 18px;
+        }
+
+        .or span {
+            background-color: white;
+            padding: 0 12px;
+            position: relative;
+            top: -7px;
+        }
+
+        .create-btn {
+            display: block;
+            text-align: center;
+            line-height: 46px;
+            border: 1px solid #cfd6e4;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        #message {
+            font-size: 13px;
+            color: #6b7386;
+            margin-bottom: 0;
+        }
+
+        .photo-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(19, 41, 91, 0.92);
+            color: white;
+            padding: 36px 48px 44px 48px;
+        }
+
+        .photo-text p {
+            color: #4fd6b8;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin: 0 0 10px 0;
+        }
+
+        .photo-text h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        @media (max-width: 900px) {
+            .right-side {
+                display: none;
+            }
+            .left-side {
+                width: 100%;
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="left-side">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <h1>Welcome Back</h1>
+
+            <div class="login-box">
+                <h2>Log in</h2>
+                <p class="subtitle">Pick up where your study group left off.</p>
+
+                <form id="loginForm">
+                    <label for="email">Student email</label>
+                    <div class="input-box">
+                        <span>&#9993;</span>
+                        <input type="email" id="email" name="email" placeholder="name@sdsu.edu" required>
+                    </div>
+
+                    <label for="password">Password</label>
+                    <div class="input-box">
+                        <span>&#9670;</span>
+                        <input type="password" id="password" name="password" placeholder="Create a password" required>
+                    </div>
+
+                    <div class="remember-row">
+                        <label><input type="checkbox" name="remember" checked>Remember Me</label>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">&rarr; &nbsp;Log In</button>
+                </form>
+
+                <div class="or"><span>OR</span></div>
+
+                <a href="register.html" class="create-btn">Create an Account</a>
+
+                <p id="message"></p>
+            </div>
+        </div>
+
+        <div class="right-side">
+            <div class="photo-text">
+                <p>FIND YOUR PEOPLE</p>
+                <h2>LEARN BETTER, TOGETHER</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var form = document.getElementById("loginForm");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            // TODO: send email + password to the backend when its ready
+            console.log("login clicked: " + email);
+            document.getElementById("message").innerText = "Login isn't connected to the backend yet.";
+        });
+    </script>
+</body>
+</html>
