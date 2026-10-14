@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Group Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .green {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .red {
+            background-color: #fde6e6;
+            color: #c0392b;
+        }
+
+        .blue {
+            background-color: #e2eafb;
+            color: #2452a6;
+        }
+
+        .content {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-top: 18px;
+        }
+
+        .left-col {
+            flex: 1;
+        }
+
+        .right-col {
+            flex: 1;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #6b7386;
+            line-height: 1.6;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .join-btn {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #2452a6;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .join-btn:hover {
+            border-color: #2452a6;
+        }
+
+        .join-btn:disabled {
+            color: #8a93a6;
+            cursor: default;
+        }
+
+        .join-btn:disabled:hover {
+            border-color: #cfd6e4;
+        }
+
+        .leave-btn {
+            color: #c0392b;
+        }
+
+        .leave-btn:hover {
+            border-color: #c0392b;
+        }
+
+        #message {
+            font-size: 12px;
+            color: #6b7386;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .content {
+                display: block;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html" class="active">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                <span id="userInfo"></span>
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1 id="groupName"></h1>
+            <p class="subtitle" id="groupSubtitle"></p>
+            <span class="badge" id="statusBadge"></span>
+
+            <div class="content">
+                <div class="left-col">
+                    <div class="card">
+                        <h3>About this group</h3>
+                        <p id="aboutText"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Meeting details</h3>
+                        <p id="meetingText"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3 id="membersTitle"></h3>
+                        <p id="membersText"></p>
+                    </div>
+                </div>
+
+                <div class="right-col">
+                    <div class="card">
+                        <div class="card-top">
+                            <h3 id="capacityTitle"></h3>
+                            <span class="badge" id="spacesBadge"></span>
+                        </div>
+                        <p id="capacityText"></p>
+                        <button class="join-btn" id="joinBtn" onclick="joinOrLeave()"></button>
+                        <p id="message"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // TODO: replace with fetch() calls to the backend (/api/auth/me and a GET /api/groups/<id> route, which doesnt exist yet)
+        var groupId = new URLSearchParams(window.location.search).get("id");
+
+        var groupData = {
+            student: {
+                student_id: 1,
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            group: {
+                group_id: 1,
+                group_name: "CS 576 Study Group",
+                course_id: 16,
+                course_code: "CS 576",
+                course_name: "Computer Networks and Distributed Systems",
+                tagline: "A focused, friendly networking study group.", // TODO: not in database, use description or add a column
+                description: "Weekly lecture review, routing and subnetting problems, and exam prep.",
+                meeting_location: "Science Library Room 204",
+                meeting_format: "in_person",
+                study_style: "Collaborative problem solving", // TODO: not in database yet, add a column or remove
+                major_preference: "Any major welcome", // TODO: not in database yet
+                gender_preference: "No gender preference", // TODO: not in database yet
+                maximum_capacity: 8,
+                creator_id: 2,
+                leader_id: 2
+            },
+            meeting_times: [
+                { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+            ],
+            members: [
+                { student_id: 2, first_name: "Maya", last_name: "Chen", major: "Computer Science" },
+                { student_id: 3, first_name: "Alex", last_name: "Morgan", major: "Computer Science" },
+                { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Engineering" },
+                { student_id: 5, first_name: "Noah", last_name: "Patel", major: "Computer Science" },
+                { student_id: 6, first_name: "Sofia", last_name: "Ortiz", major: "Mathematics" }
+            ]
+        };
+
+        document.getElementById("userInfo").innerHTML = groupData.student.first_name + " " + groupData.student.last_name + " &middot; " + groupData.student.major;
+
+        function formatDay(day) {
+            return day.charAt(0).toUpperCase() + day.substring(1);
+        }
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+
+            if (minutes == "00") {
+                return hour + " " + ampm;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        function formatDuration(start, end) {
+            var s = start.split(":");
+            var e = end.split(":");
+            var minutes = (parseInt(e[0]) * 60 + parseInt(e[1])) - (parseInt(s[0]) * 60 + parseInt(s[1]));
+
+            if (minutes == 60) {
+                return "1 hour";
+            }
+            if (minutes % 60 == 0) {
+                return (minutes / 60) + " hours";
+            }
+            return minutes + " minutes";
+        }
+
+        function formatMeeting(format) {
+            if (format == "in_person") {
+                return "In person";
+            } else if (format == "online") {
+                return "Online";
+            } else if (format == "hybrid") {
+                return "Hybrid";
+            }
+            return format;
+        }
+
+        function getLeader() {
+            for (var i = 0; i < groupData.members.length; i++) {
+                if (groupData.members[i].student_id == groupData.group.leader_id) {
+                    return groupData.members[i];
+                }
+            }
+            return null;
+        }
+
+        function isMember() {
+            for (var i = 0; i < groupData.members.length; i++) {
+                if (groupData.members[i].student_id == groupData.student.student_id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function showGroup() {
+            var group = groupData.group;
+            var members = groupData.members;
+            var spaces = group.maximum_capacity - members.length;
+            var leader = getLeader();
+
+            document.title = "Study Group Finder - " + group.group_name;
+            document.getElementById("groupName").innerText = group.group_name;
+            document.getElementById("groupSubtitle").innerHTML = group.course_name + " &middot; " + group.tagline;
+
+            var about = group.description;
+            if (leader != null) {
+                about += " Leader: " + leader.first_name + " " + leader.last_name + " &middot; " + leader.major + ".";
+            }
+            document.getElementById("aboutText").innerHTML = about;
+
+            var times = "";
+            for (var i = 0; i < groupData.meeting_times.length; i++) {
+                var t = groupData.meeting_times[i];
+                if (i > 0) {
+                    times += " &middot; ";
+                }
+                times += "Every " + formatDay(t.day_of_week) + " &middot; " + formatTime(t.start_time) + " &middot; " + formatDuration(t.start_time, t.end_time);
+            }
+
+            document.getElementById("meetingText").innerHTML =
+                times +
+                " &middot; " + group.meeting_location +
+                " &middot; " + formatMeeting(group.meeting_format) +
+                " &middot; " + group.study_style +
+                " &middot; " + group.major_preference +
+                " &middot; " + group.gender_preference;
+
+            document.getElementById("membersTitle").innerHTML = "Members &middot; " + members.length + " of " + group.maximum_capacity;
+
+            var names = [];
+            for (var i = 0; i < members.length; i++) {
+                var name = members[i].first_name + " " + members[i].last_name;
+                if (members[i].student_id == group.leader_id) {
+                    name += ", leader";
+                }
+                if (members[i].student_id == groupData.student.student_id) {
+                    name += ", you";
+                }
+                names.push(name);
+            }
+            document.getElementById("membersText").innerHTML = names.join(" &middot; ");
+
+            document.getElementById("capacityTitle").innerHTML = "Group capacity &middot; " + members.length + "/" + group.maximum_capacity;
+
+            var statusBadge = document.getElementById("statusBadge");
+            var spacesBadge = document.getElementById("spacesBadge");
+            var joinBtn = document.getElementById("joinBtn");
+            joinBtn.disabled = false;
+            joinBtn.className = "join-btn";
+
+            var spacesText = spaces + " spaces";
+            if (spaces == 1) {
+                spacesText = "1 space";
+            }
+
+            if (isMember()) {
+                statusBadge.className = "badge blue";
+                statusBadge.innerText = "Member";
+                spacesBadge.className = "badge green";
+                spacesBadge.innerText = spacesText;
+                document.getElementById("capacityText").innerText = "You're in this group.";
+                joinBtn.innerText = "Leave Group";
+                joinBtn.className = "join-btn leave-btn";
+            } else if (spaces <= 0) {
+                statusBadge.className = "badge red";
+                statusBadge.innerText = "Full";
+                spacesBadge.className = "badge red";
+                spacesBadge.innerText = "Full";
+                document.getElementById("capacityText").innerText = "Capacity of " + group.maximum_capacity + " reached.";
+                joinBtn.innerText = "Group Full";
+                joinBtn.disabled = true;
+            } else {
+                statusBadge.className = "badge green";
+                statusBadge.innerHTML = "Open &middot; " + spacesText;
+                spacesBadge.className = "badge green";
+                spacesBadge.innerText = spacesText;
+                document.getElementById("capacityText").innerText = "Open groups approve requests automatically.";
+                joinBtn.innerText = "Request to Join"; // TODO: Phase 1 joins right away, maybe change to Join Group
+            }
+        }
+
+        function joinOrLeave() {
+            var me = groupData.student;
+
+            if (isMember()) {
+                if (me.student_id == groupData.group.leader_id) {
+                    document.getElementById("message").innerText = "You're the leader, you can't leave your own group.";
+                    return;
+                }
+                for (var i = 0; i < groupData.members.length; i++) {
+                    if (groupData.members[i].student_id == me.student_id) {
+                        groupData.members.splice(i, 1);
+                        break;
+                    }
+                }
+                // TODO: send leave request to the backend (no leave route yet)
+                document.getElementById("message").innerText = "You left the group.";
+            } else {
+                if (groupData.group.maximum_capacity - groupData.members.length <= 0) {
+                    return;
+                }
+                groupData.members.push({
+                    student_id: me.student_id,
+                    first_name: me.first_name,
+                    last_name: me.last_name,
+                    major: me.major
+                });
+                // TODO: POST /api/groups/<group_id>/join
+                document.getElementById("message").innerText = "You joined the group.";
+            }
+
+            showGroup();
+        }
+
+        showGroup();
+    </script>
+</body>
+</html>
