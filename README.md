@@ -1,4 +1,4 @@
-# Study Group Finder backend
+# Study Group Finder backend (example for our project feel free to change or correct any mistakes)
 
 ## Setup
 
