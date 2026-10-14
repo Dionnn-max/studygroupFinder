@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Create Group</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .form-col {
+            flex: 1;
+            max-width: 640px;
+        }
+
+        .section {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-top {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .step {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 12px;
+        }
+
+        .section-top h3 {
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .section-top p {
+            font-size: 11px;
+            color: #6b7386;
+            margin: 3px 0 0 0;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .optional {
+            font-size: 10px;
+            color: #8a93a6;
+        }
+
+        .required {
+            font-size: 10px;
+            font-weight: 600;
+            color: #2452a6;
+            background-color: #e2eafb;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        select,
+        input[type="text"],
+        textarea {
+            width: 100%;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-family: inherit;
+            color: #13295b;
+            background-color: white;
+        }
+
+        select,
+        input[type="text"] {
+            height: 42px;
+        }
+
+        textarea {
+            height: 80px;
+            padding-top: 10px;
+            resize: vertical;
+        }
+
+        .name-preview {
+            font-size: 11px;
+            color: #6b7386;
+            margin-top: 6px;
+        }
+
+        .two-col {
+            display: flex;
+            gap: 12px;
+        }
+
+        .two-col .field {
+            width: 50%;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .option {
+            flex: 1;
+            height: 38px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #13295b;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .option.selected {
+            border-color: #2452a6;
+            background-color: #e8eefb;
+            color: #2452a6;
+            font-weight: 600;
+        }
+
+        .days {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .day {
+            width: 46px;
+            height: 34px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #13295b;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .day.selected {
+            background-color: #2452a6;
+            border-color: #2452a6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .capacity-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .capacity-row select {
+            width: 200px;
+        }
+
+        .hint {
+            flex: 1;
+            background-color: #dff7ef;
+            color: #2c5a52;
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-size: 11px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .cancel-btn {
+            padding: 11px 16px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #2452a6;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .create-btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2452a6;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .create-btn:hover {
+            background-color: #1c4390;
+        }
+
+        #message {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #c0392b;
+        }
+
+        .success {
+            color: #1f8a5f;
+        }
+
+        .tips {
+            width: 260px;
+            flex-shrink: 0;
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .tips h3 {
+            font-size: 14px;
+            margin: 0 0 12px 0;
+        }
+
+        .tips p {
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            color: #6b7386;
+            margin: 0 0 10px 0;
+        }
+
+        .tips span {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            background-color: #dff7ef;
+            color: #1f8a5f;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .content {
+                display: block;
+            }
+            .tips {
+                width: 100%;
+                margin-bottom: 14px;
+            }
+            .two-col,
+            .capacity-row {
+                display: block;
+            }
+            .two-col .field,
+            .capacity-row select {
+                width: 100%;
+            }
+            .hint {
+                margin-top: 10px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html">Find Groups</a>
+            <a href="create-group.html" class="active">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                <span id="userInfo"></span>
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1>Create Study Group</h1>
+            <p class="subtitle">Set clear expectations so the right classmates can find and join your group.</p>
+
+            <div class="content">
+                <div class="form-col">
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">1</div>
+                            <div>
+                                <h3>Group basics</h3>
+                                <p>Select an SDSU course. The group name is generated automatically.</p>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="course">Course</label>
+                            <select id="course" onchange="updateName()" style="margin-top: 6px;">
+                                <option value="">Select an SDSU CS course</option>
+                            </select>
+                            <div class="name-preview" id="namePreview"></div>
+                        </div>
+
+                        <div class="field">
+                            <label for="description">Description</label>
+                            <textarea id="description" style="margin-top: 6px;" placeholder="Weekly review of lecture concepts, problem sets, and exam prep. Bring one question and one resource."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">2</div>
+                            <div>
+                                <h3>Access and preferences</h3>
+                                <p>Choose who can join and any optional matching preferences.</p>
+                            </div>
+                        </div>
+
+                        <div class="label-row" style="justify-content: flex-start;">
+                            <label>Access type</label>
+                            <span class="required">Required</span>
+                        </div>
+                        <div class="options" id="accessOptions">
+                            <button type="button" class="option selected" onclick="pickAccess(this, 'open')">Open</button>
+                            <button type="button" class="option" onclick="pickAccess(this, 'approval_required')">&#10003; Approval Required</button>
+                            <button type="button" class="option" onclick="pickAccess(this, 'invite_only')">&#9670; Invite Only</button>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="majorPref">Major preference</label>
+                                </div>
+                                <select id="majorPref"></select>
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="genderPref">Gender preference</label>
+                                    <span class="optional">Optional</span>
+                                </div>
+                                <select id="genderPref"></select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="label-row">
+                                <label for="studyHabit">Study habit</label>
+                            </div>
+                            <select id="studyHabit"></select>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">3</div>
+                            <div>
+                                <h3>Meeting plan</h3>
+                                <p>Set a predictable schedule and place to meet.</p>
+                            </div>
+                        </div>
+
+                        <div class="options" id="formatOptions">
+                            <button type="button" class="option selected" onclick="pickFormat(this, 'in_person')">&#8982; In person</button>
+                            <button type="button" class="option" onclick="pickFormat(this, 'online')">&#9673; Online</button>
+                            <button type="button" class="option" onclick="pickFormat(this, 'hybrid')">&#9644; Hybrid</button>
+                        </div>
+
+                        <div class="days" id="dayList"></div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="startTime">Start time</label>
+                                </div>
+                                <select id="startTime"></select>
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="endTime">End Time</label>
+                                </div>
+                                <select id="endTime"></select>
+                            </div>
+                        </div>
+
+                        <div class="field" id="locationField">
+                            <div class="label-row">
+                                <label for="location">Location</label>
+                            </div>
+                            <input type="text" id="location" placeholder="Love Library">
+                        </div>
+
+                        <div class="field">
+                            <div class="label-row">
+                                <label for="meetingLink">Meeting link</label>
+                                <span class="optional" id="linkOptional">Optional</span>
+                            </div>
+                            <input type="text" id="meetingLink" placeholder="https://zoom.us/...">
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">4</div>
+                            <div>
+                                <h3>Capacity</h3>
+                                <p>Keep the group small enough for everyone to participate.</p>
+                            </div>
+                        </div>
+
+                        <label for="capacity">Maximum capacity</label>
+                        <div class="capacity-row" style="margin-top: 6px;">
+                            <select id="capacity"></select>
+                            <div class="hint">&#10022; Groups of 4&ndash;8 tend to balance participation and accountability.</div>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <a href="dashboard.html" class="cancel-btn">Cancel</a>
+                        <button type="button" class="create-btn" onclick="createGroup()">&#9679; &nbsp;Create Group</button>
+                    </div>
+                    <p id="message"></p>
+                </div>
+
+                <div class="tips">
+                    <h3>&#10022; Build a great group</h3>
+                    <p><span>1</span>Use a clear, course-specific name.</p>
+                    <p><span>2</span>Describe what members should bring.</p>
+                    <p><span>3</span>Choose a schedule you can sustain.</p>
+                    <p><span>4</span>Keep the first meeting in a public space.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var createData = {
+            student: {
+                student_id: 1,
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            allCourses: [
+                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture" },
+                { course_id: 15, course_code: "CS 420", course_name: "Advanced Programming Languages" },
+                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence" },
+                { course_id: 8, course_code: "CS 460", course_name: "Algorithms" },
+                { course_id: 9, course_code: "CS 480", course_name: "Operating Systems" },
+                { course_id: 11, course_code: "CS 514", course_name: "Database Theory and Implementation" },
+                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" }
+            ],
+            major_preferences: ["Any major welcome", "Computer Science", "Computer Engineering", "Mathematics"], // TODO: not in database yet
+            gender_preferences: ["No preference", "Female only", "Male only"], // TODO: not in database yet
+            study_habits: ["Collaborative problem solving", "Silent study", "Exam prep", "Project based"], // TODO: not in database yet
+            days: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            min_capacity: 2,
+            max_capacity: 12
+        };
+
+        var newGroup = {
+            access_type: "open", // TODO: not in database yet, Phase 1 is open only
+            meeting_format: "in_person",
+            days: ["wednesday"]
+        };
+
+        document.getElementById("userInfo").innerHTML = createData.student.first_name + " " + createData.student.last_name + " &middot; " + createData.student.major;
+
+        function fillSelect(id, list) {
+            var select = document.getElementById(id);
+            for (var i = 0; i < list.length; i++) {
+                select.innerHTML += "<option>" + list[i] + "</option>";
+            }
+        }
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        function setupForm() {
+            var courseSelect = document.getElementById("course");
+            for (var i = 0; i < createData.allCourses.length; i++) {
+                var c = createData.allCourses[i];
+                courseSelect.innerHTML += '<option value="' + c.course_id + '">' + c.course_code + " " + c.course_name + "</option>";
+            }
+
+            fillSelect("majorPref", createData.major_preferences);
+            fillSelect("genderPref", createData.gender_preferences);
+            fillSelect("studyHabit", createData.study_habits);
+
+            // times every 30 min from 7 AM to 10 PM, stored like the database (17:30:00)
+            var startSelect = document.getElementById("startTime");
+            var endSelect = document.getElementById("endTime");
+            for (var h = 7; h <= 22; h++) {
+                for (var m = 0; m < 60; m += 30) {
+                    var hh = h;
+                    if (h < 10) {
+                        hh = "0" + h;
+                    }
+                    var mm = "00";
+                    if (m == 30) {
+                        mm = "30";
+                    }
+                    var value = hh + ":" + mm + ":00";
+                    var option = '<option value="' + value + '">' + formatTime(value) + "</option>";
+                    startSelect.innerHTML += option;
+                    endSelect.innerHTML += option;
+                }
+            }
+            startSelect.value = "17:30:00";
+            endSelect.value = "18:30:00";
+
+            var capacitySelect = document.getElementById("capacity");
+            for (var n = createData.min_capacity; n <= createData.max_capacity; n++) {
+                capacitySelect.innerHTML += '<option value="' + n + '">' + n + " students</option>";
+            }
+            capacitySelect.value = "8";
+
+            showDays();
+        }
+
+        function showDays() {
+            var html = "";
+            for (var i = 0; i < createData.days.length; i++) {
+                var day = createData.days[i];
+                var label = day.charAt(0).toUpperCase() + day.substring(1, 3);
+                var cls = "day";
+                if (newGroup.days.indexOf(day) != -1) {
+                    cls = "day selected";
+                }
+                html += '<button type="button" class="' + cls + '" onclick="toggleDay(\'' + day + '\')">' + label + "</button>";
+            }
+            document.getElementById("dayList").innerHTML = html;
+        }
+
+        function toggleDay(day) {
+            var index = newGroup.days.indexOf(day);
+            if (index == -1) {
+                newGroup.days.push(day);
+            } else {
+                newGroup.days.splice(index, 1);
+            }
+            showDays();
+        }
+
+        function pickAccess(btn, type) {
+            var buttons = document.getElementById("accessOptions").children;
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "option";
+            }
+            btn.className = "option selected";
+            newGroup.access_type = type;
+        }
+
+        function pickFormat(btn, format) {
+            var buttons = document.getElementById("formatOptions").children;
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "option";
+            }
+            btn.className = "option selected";
+            newGroup.meeting_format = format;
+
+            if (format == "online") {
+                document.getElementById("locationField").style.display = "none";
+                document.getElementById("linkOptional").innerText = "Required";
+            } else {
+                document.getElementById("locationField").style.display = "block";
+                document.getElementById("linkOptional").innerText = "Optional";
+            }
+        }
+
+        function getCourse(id) {
+            for (var i = 0; i < createData.allCourses.length; i++) {
+                if (createData.allCourses[i].course_id == id) {
+                    return createData.allCourses[i];
+                }
+            }
+            return null;
+        }
+
+        function updateName() {
+            var course = getCourse(document.getElementById("course").value);
+            if (course == null) {
+                document.getElementById("namePreview").innerText = "";
+            } else {
+                document.getElementById("namePreview").innerText = "Group name: " + course.course_code + " Study Group";
+            }
+        }
+
+        function showMessage(text, type) {
+            var message = document.getElementById("message");
+            message.className = type;
+            message.innerText = text;
+        }
+
+        function createGroup() {
+            var course = getCourse(document.getElementById("course").value);
+            var start = document.getElementById("startTime").value;
+            var end = document.getElementById("endTime").value;
+            var location = document.getElementById("location").value.trim();
+            var link = document.getElementById("meetingLink").value.trim();
+
+            if (course == null) {
+                showMessage("Pick a course first", "error");
+                return;
+            }
+            if (newGroup.days.length == 0) {
+                showMessage("Pick at least one day", "error");
+                return;
+            }
+            if (end <= start) {
+                showMessage("End time has to be after the start time", "error");
+                return;
+            }
+            if (newGroup.meeting_format != "online" && location == "") {
+                showMessage("Add a location for in person or hybrid groups", "error");
+                return;
+            }
+            if (newGroup.meeting_format == "online" && link == "") {
+                showMessage("Add a meeting link for online groups", "error");
+                return;
+            }
+
+            var meetingTimes = [];
+            for (var i = 0; i < createData.days.length; i++) {
+                if (newGroup.days.indexOf(createData.days[i]) != -1) {
+                    meetingTimes.push({ day_of_week: createData.days[i], start_time: start, end_time: end });
+                }
+            }
+
+            var meetingLocation = location;
+            if (newGroup.meeting_format == "online") {
+                meetingLocation = link;
+            } else if (link != "") {
+                meetingLocation = location + " + " + link;
+            }
+
+            var group = {
+                course_id: course.course_id,
+                group_name: course.course_code + " Study Group",
+                description: document.getElementById("description").value.trim(),
+                meeting_format: newGroup.meeting_format,
+                meeting_location: meetingLocation,
+                maximum_capacity: parseInt(document.getElementById("capacity").value),
+                creator_id: createData.student.student_id,
+                leader_id: createData.student.student_id,
+                access_type: newGroup.access_type,
+                major_preference: document.getElementById("majorPref").value,
+                gender_preference: document.getElementById("genderPref").value,
+                study_style: document.getElementById("studyHabit").value,
+                meeting_times: meetingTimes
+            };
+
+            // TODO: send group to the backend when its connected
+            console.log(group);
+            showMessage(group.group_name + " is ready. Saving isn't connected to the backend yet.", "success");
+        }
+
+        setupForm();
+    </script>
+</body>
+</html>

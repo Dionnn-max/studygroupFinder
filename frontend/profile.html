@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .green {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .yellow {
+            background-color: #fdf1d8;
+            color: #a8700f;
+        }
+
+        .content {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .form-col {
+            flex: 1;
+            max-width: 640px;
+        }
+
+        .section {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-top {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .step {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 12px;
+        }
+
+        .section-top h3 {
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .section-top p {
+            font-size: 11px;
+            color: #6b7386;
+            margin: 3px 0 0 0;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .optional {
+            font-size: 10px;
+            color: #8a93a6;
+        }
+
+        .required {
+            font-size: 10px;
+            font-weight: 600;
+            color: #2452a6;
+            background-color: #e2eafb;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        select,
+        input[type="text"],
+        textarea {
+            width: 100%;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-family: inherit;
+            color: #13295b;
+            background-color: white;
+        }
+
+        select,
+        input[type="text"] {
+            height: 42px;
+        }
+
+        textarea {
+            height: 80px;
+            padding-top: 10px;
+            resize: vertical;
+        }
+
+        .name-preview {
+            font-size: 11px;
+            color: #6b7386;
+            margin-top: 6px;
+        }
+
+        .two-col {
+            display: flex;
+            gap: 12px;
+        }
+
+        .two-col .field {
+            width: 50%;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .option {
+            flex: 1;
+            height: 38px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #13295b;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .option.selected {
+            border-color: #2452a6;
+            background-color: #e8eefb;
+            color: #2452a6;
+            font-weight: 600;
+        }
+
+        .days {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .day {
+            width: 46px;
+            height: 34px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #13295b;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .day.selected {
+            background-color: #2452a6;
+            border-color: #2452a6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .capacity-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .capacity-row select {
+            width: 200px;
+        }
+
+        .hint {
+            flex: 1;
+            background-color: #dff7ef;
+            color: #2c5a52;
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-size: 11px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .cancel-btn {
+            padding: 11px 16px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #2452a6;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .create-btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2452a6;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .create-btn:hover {
+            background-color: #1c4390;
+        }
+
+        #message {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #c0392b;
+        }
+
+        .success {
+            color: #1f8a5f;
+        }
+
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-family: inherit;
+            color: #13295b;
+            background-color: white;
+        }
+
+        .cancel-btn {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .side-col {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .side-card {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .person {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e2eafb;
+            color: #2452a6;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 12px;
+        }
+
+        .person b {
+            font-size: 15px;
+        }
+
+        .person p {
+            font-size: 12px;
+            color: #6b7386;
+            margin: 2px 0 0 0;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6b7386;
+            padding: 6px 0;
+        }
+
+        .stat b {
+            color: #13295b;
+        }
+
+        .info-card {
+            display: flex;
+            background-color: #e8eefb;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 11px;
+            color: #2452a6;
+        }
+
+        .info-card span {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .info-card p {
+            margin: 3px 0 0 0;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .content,
+            .top-row,
+            .two-col {
+                display: block;
+            }
+            .two-col .field {
+                width: 100%;
+            }
+            .side-col {
+                width: 100%;
+                margin-bottom: 14px;
+            }
+            .options {
+                flex-wrap: wrap;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html" class="active">Profile Settings</a>
+
+            <div class="user-info">
+                <span id="userInfo"></span>
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top-row">
+                <div>
+                    <h1>Profile Settings</h1>
+                    <p class="subtitle">Keep your information and study preferences current for better group matches.</p>
+                </div>
+                <span class="badge" id="completeBadge"></span>
+            </div>
+
+            <div class="content">
+                <div class="form-col">
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">1</div>
+                            <div>
+                                <h3>Personal information</h3>
+                                <p>Your student identity and contact details.</p>
+                            </div>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="fullName">Full name</label>
+                                </div>
+                                <input type="text" id="fullName">
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="email">Student email</label>
+                                </div>
+                                <input type="email" id="email">
+                            </div>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="major">Major</label>
+                                </div>
+                                <select id="major"></select>
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="dateOfBirth">Date of birth</label>
+                                </div>
+                                <input type="date" id="dateOfBirth">
+                            </div>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="genderPref">Gender preference</label>
+                                </div>
+                                <select id="genderPref"></select>
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="phone">Phone number</label>
+                                    <span class="optional">Optional</span>
+                                </div>
+                                <input type="text" id="phone" placeholder="(619) 555-0123">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-top">
+                            <div class="step">2</div>
+                            <div>
+                                <h3>Study preferences</h3>
+                                <p>Set the schedule and format that work best for you.</p>
+                            </div>
+                        </div>
+
+                        <label>Availability</label>
+                        <div class="days" id="dayList" style="margin-top: 6px;"></div>
+
+                        <div class="two-col">
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="startPref">Typical start time</label>
+                                </div>
+                                <select id="startPref"></select>
+                            </div>
+                            <div class="field">
+                                <div class="label-row">
+                                    <label for="lengthPref">Session length</label>
+                                </div>
+                                <select id="lengthPref"></select>
+                            </div>
+                        </div>
+
+                        <label>Preferred meeting format</label>
+                        <div class="options" id="formatOptions" style="margin-top: 6px;"></div>
+
+                        <div class="field">
+                            <div class="label-row">
+                                <label for="studyHabits">Study habits</label>
+                            </div>
+                            <textarea id="studyHabits"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <button type="button" class="cancel-btn" onclick="resetForm()">Cancel</button>
+                        <button type="button" class="create-btn" onclick="saveProfile()">&#10003; &nbsp;Save Changes</button>
+                    </div>
+                    <p id="message"></p>
+                </div>
+
+                <div class="side-col">
+                    <div class="side-card">
+                        <div class="person">
+                            <div class="avatar" id="initials"></div>
+                            <div>
+                                <b id="sideName"></b>
+                                <p id="sideMajor"></p>
+                            </div>
+                        </div>
+                        <div class="stat"><span>Courses</span><b id="courseCount"></b></div>
+                        <div class="stat"><span>Groups</span><b id="groupCount"></b></div>
+                        <div class="stat"><span>Member since</span><b id="memberSince"></b></div>
+                    </div>
+
+                    <div class="info-card">
+                        <span>i</span>
+                        <div>
+                            <b>Visible to group leaders</b>
+                            <p>Your major, availability, preferred format, and study habits help leaders get to know members. Your email stays private.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var profileData = {
+            student: {
+                student_id: 1,
+                student_email: "dion.chen@sdsu.edu",
+                first_name: "Dion",
+                last_name: "Chen",
+                date_of_birth: "2005-03-14",
+                gender: "Male",
+                major: "Computer Science",
+                phone_number: "",
+                created_at: "2025-08-18 12:00:00"
+            },
+            // TODO: none of these study preferences are in the database yet, add a table or remove
+            preferences: {
+                gender_preference: "No preference",
+                availability: ["tuesday", "wednesday", "thursday", "saturday"],
+                typical_start: "After 5:30 PM",
+                session_length: "60-90 minutes",
+                meeting_format: "hybrid",
+                study_habits: "Collaborative problem solving, weekly review, and practice exams. I like to compare approaches after focused work."
+            },
+            course_count: 3,
+            group_count: 4,
+            majors: ["Computer Science", "Computer Engineering", "Mathematics", "Biology", "Business", "Psychology", "Other"], // TODO: there is no majors table, same list as register.html
+            gender_preferences: ["No preference", "Female only", "Male only"],
+            start_options: ["Before 12 PM", "12 PM - 5:30 PM", "After 5:30 PM", "Flexible"],
+            length_options: ["Under 60 minutes", "60-90 minutes", "90-120 minutes", "2+ hours"],
+            days: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            formats: [
+                { value: "in_person", label: "&#8982; In person" },
+                { value: "online", label: "&#9673; Online" },
+                { value: "hybrid", label: "&#9644; Hybrid" }
+            ]
+        };
+
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        // copy of the preferences while editing, so cancel can undo it
+        var editDays = [];
+        var editFormat = "";
+
+        function fillSelect(id, list) {
+            var select = document.getElementById(id);
+            select.innerHTML = "";
+            for (var i = 0; i < list.length; i++) {
+                select.innerHTML += "<option>" + list[i] + "</option>";
+            }
+        }
+
+        function showDays() {
+            var html = "";
+            for (var i = 0; i < profileData.days.length; i++) {
+                var day = profileData.days[i];
+                var label = day.charAt(0).toUpperCase() + day.substring(1, 3);
+                var cls = "day";
+                if (editDays.indexOf(day) != -1) {
+                    cls = "day selected";
+                }
+                html += '<button type="button" class="' + cls + '" onclick="toggleDay(\'' + day + '\')">' + label + "</button>";
+            }
+            document.getElementById("dayList").innerHTML = html;
+        }
+
+        function toggleDay(day) {
+            var index = editDays.indexOf(day);
+            if (index == -1) {
+                editDays.push(day);
+            } else {
+                editDays.splice(index, 1);
+            }
+            showDays();
+        }
+
+        function showFormats() {
+            var html = "";
+            for (var i = 0; i < profileData.formats.length; i++) {
+                var f = profileData.formats[i];
+                var cls = "option";
+                if (f.value == editFormat) {
+                    cls = "option selected";
+                }
+                html += '<button type="button" class="' + cls + '" onclick="pickFormat(\'' + f.value + '\')">' + f.label + "</button>";
+            }
+            document.getElementById("formatOptions").innerHTML = html;
+        }
+
+        function pickFormat(format) {
+            editFormat = format;
+            showFormats();
+        }
+
+        function showSummary() {
+            var s = profileData.student;
+            var parts = s.created_at.split(" ")[0].split("-");
+
+            document.getElementById("userInfo").innerHTML = s.first_name + " " + s.last_name + " &middot; " + s.major;
+            document.getElementById("initials").innerText = s.first_name.charAt(0) + s.last_name.charAt(0);
+            document.getElementById("sideName").innerText = s.first_name + " " + s.last_name;
+            document.getElementById("sideMajor").innerText = s.major;
+            document.getElementById("courseCount").innerText = profileData.course_count + " active";
+            document.getElementById("groupCount").innerText = profileData.group_count + " total";
+            document.getElementById("memberSince").innerText = monthNames[parseInt(parts[1]) - 1] + " " + parts[0];
+
+            var badge = document.getElementById("completeBadge");
+            if (s.major != "" && s.date_of_birth != "" && profileData.preferences.availability.length > 0 && profileData.preferences.study_habits != "") {
+                badge.className = "badge green";
+                badge.innerText = "Profile complete";
+            } else {
+                badge.className = "badge yellow";
+                badge.innerText = "Profile incomplete";
+            }
+        }
+
+        function resetForm() {
+            var s = profileData.student;
+            var p = profileData.preferences;
+
+            document.getElementById("fullName").value = s.first_name + " " + s.last_name;
+            document.getElementById("email").value = s.student_email;
+            document.getElementById("major").value = s.major;
+            document.getElementById("dateOfBirth").value = s.date_of_birth;
+            document.getElementById("genderPref").value = p.gender_preference;
+            document.getElementById("phone").value = s.phone_number;
+            document.getElementById("startPref").value = p.typical_start;
+            document.getElementById("lengthPref").value = p.session_length;
+            document.getElementById("studyHabits").value = p.study_habits;
+
+            editDays = p.availability.slice();
+            editFormat = p.meeting_format;
+            showDays();
+            showFormats();
+
+            document.getElementById("message").innerText = "";
+        }
+
+        function showMessage(text, type) {
+            var message = document.getElementById("message");
+            message.className = type;
+            message.innerText = text;
+        }
+
+        function saveProfile() {
+            var fullName = document.getElementById("fullName").value.trim();
+            var email = document.getElementById("email").value.trim();
+            var dob = document.getElementById("dateOfBirth").value;
+
+            if (fullName.indexOf(" ") == -1) {
+                showMessage("Enter your first and last name", "error");
+                return;
+            }
+            if (!email.endsWith(".edu")) {
+                showMessage("Please use your student email (.edu)", "error");
+                return;
+            }
+            if (dob == "") {
+                showMessage("Date of birth is required", "error");
+                return;
+            }
+
+            // the database has first_name and last_name, so split the full name
+            var space = fullName.indexOf(" ");
+            var s = profileData.student;
+            s.first_name = fullName.substring(0, space);
+            s.last_name = fullName.substring(space + 1).trim();
+            s.student_email = email;
+            s.major = document.getElementById("major").value;
+            s.date_of_birth = dob;
+            s.phone_number = document.getElementById("phone").value.trim();
+
+            var p = profileData.preferences;
+            p.gender_preference = document.getElementById("genderPref").value;
+            p.availability = editDays.slice();
+            p.typical_start = document.getElementById("startPref").value;
+            p.session_length = document.getElementById("lengthPref").value;
+            p.meeting_format = editFormat;
+            p.study_habits = document.getElementById("studyHabits").value.trim();
+
+            // TODO: send to the backend when its connected
+            console.log(profileData.student, profileData.preferences);
+            showSummary();
+            showMessage("Changes saved on this page. Saving isn't connected to the backend yet.", "success");
+        }
+
+        fillSelect("major", profileData.majors);
+        fillSelect("genderPref", profileData.gender_preferences);
+        fillSelect("startPref", profileData.start_options);
+        fillSelect("lengthPref", profileData.length_options);
+        resetForm();
+        showSummary();
+    </script>
+</body>
+</html>

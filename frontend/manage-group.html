@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Manage Group</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .edit-btn {
+            padding: 12px 18px;
+            border-radius: 8px;
+            background-color: #2452a6;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .edit-btn:hover {
+            background-color: #1c4390;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #6b7386;
+            margin: 4px 0 0 0;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .green {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .red {
+            background-color: #fde6e6;
+            color: #c0392b;
+        }
+
+        .blue {
+            background-color: #e2eafb;
+            color: #2452a6;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .info-box {
+            flex: 1;
+            background-color: #f5f8fd;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .info-box span {
+            font-size: 10px;
+            font-weight: 600;
+            color: #6b7386;
+        }
+
+        .info-box b {
+            display: block;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .bar-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        .bar-text span:last-child {
+            color: #1f8a5f;
+        }
+
+        .bar {
+            height: 8px;
+            background-color: #dff7ef;
+            border-radius: 10px;
+        }
+
+        .bar-fill {
+            height: 8px;
+            background-color: #2452a6;
+            border-radius: 10px;
+        }
+
+        .notice {
+            display: none;
+            background-color: #dff7ef;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #1f6b52;
+        }
+
+        .notice b {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .members-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .members-top h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .members-top span {
+            font-size: 11px;
+            color: #6b7386;
+        }
+
+        .member {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eef1f6;
+        }
+
+        .member:last-child {
+            border-bottom: none;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 12px;
+            background-color: #e2eafb;
+            color: #2452a6;
+        }
+
+        .avatar.c1 {
+            background-color: #ebe4fb;
+            color: #6a48c9;
+        }
+
+        .avatar.c2 {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .avatar.c3 {
+            background-color: #fdf1d8;
+            color: #a8700f;
+        }
+
+        .member-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .member-name .badge {
+            margin-left: 6px;
+        }
+
+        .member-date {
+            width: 140px;
+            font-size: 12px;
+            color: #6b7386;
+        }
+
+        .member-action {
+            width: 130px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7386;
+        }
+
+        .red-btn {
+            padding: 8px 12px;
+            border: 1px solid #f3c4c4;
+            border-radius: 8px;
+            background-color: #fdeeee;
+            color: #c0392b;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .red-btn:hover {
+            border-color: #c0392b;
+        }
+
+        .plain-btn {
+            padding: 8px 12px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            background-color: white;
+            color: #2452a6;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .confirm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fdeeee;
+            border: 1px solid #f3c4c4;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 6px 0;
+        }
+
+        .confirm b {
+            font-size: 12px;
+            color: #c0392b;
+        }
+
+        .confirm p {
+            font-size: 11px;
+            color: #c0392b;
+            margin: 3px 0 0 0;
+        }
+
+        .close-title {
+            font-size: 15px;
+            color: #c0392b;
+            margin: 0;
+        }
+
+        #closeConfirm {
+            display: none;
+            margin-top: 12px;
+        }
+
+        #notLeader {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .top-row,
+            .info-row,
+            .confirm {
+                display: block;
+            }
+            .edit-btn {
+                display: inline-block;
+                margin-bottom: 16px;
+            }
+            .info-box {
+                margin-bottom: 10px;
+            }
+            .member {
+                flex-wrap: wrap;
+            }
+            .member-date {
+                width: auto;
+                margin-left: 48px;
+            }
+            .confirm div:last-child {
+                margin-top: 10px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html" class="active">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                <span id="userInfo"></span>
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top-row">
+                <div>
+                    <h1>Manage Group and Members</h1>
+                    <p class="subtitle" id="subtitle"></p>
+                </div>
+                <a href="#" class="edit-btn" id="editBtn">&#9998; Edit Group</a>
+            </div>
+
+            <div class="card" id="notLeader">
+                <h3>Only the group leader can manage this group</h3>
+                <p class="small">You can still see the group from its details page.</p>
+            </div>
+
+            <div id="leaderView">
+                <div class="card">
+                    <div class="card-top">
+                        <div>
+                            <h3 id="groupName"></h3>
+                            <p class="small" id="courseName"></p>
+                        </div>
+                        <span class="badge" id="statusBadge"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-box">
+                            <span>MEETING</span>
+                            <b id="meetingMain"></b>
+                            <p class="small" id="meetingSub"></p>
+                        </div>
+                        <div class="info-box">
+                            <span>LOCATION</span>
+                            <b id="locationMain"></b>
+                            <p class="small" id="locationSub"></p>
+                        </div>
+                        <div class="info-box">
+                            <span>CAPACITY</span>
+                            <b id="capacityMain"></b>
+                            <p class="small" id="capacitySub"></p>
+                        </div>
+                    </div>
+
+                    <div class="bar-text">
+                        <span id="occupiedText"></span>
+                        <span id="availableText"></span>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-fill" id="barFill"></div>
+                    </div>
+                </div>
+
+                <div class="notice" id="notice"></div>
+
+                <div class="members-top">
+                    <h2>Members</h2>
+                    <span id="memberCount"></span>
+                </div>
+                <div class="card" id="memberList"></div>
+
+                <div class="card" id="closeCard">
+                    <div class="card-top">
+                        <div>
+                            <h3 class="close-title">Close this group</h3>
+                            <p class="small">Closing stops new members from joining and cancels future meetings.</p>
+                        </div>
+                        <button class="red-btn" id="closeBtn" onclick="showCloseConfirm()">Close Group</button>
+                    </div>
+
+                    <div class="confirm" id="closeConfirm">
+                        <div>
+                            <b id="closeQuestion"></b>
+                            <p>This closes the group right away and can't be undone.</p>
+                        </div>
+                        <div>
+                            <button class="plain-btn" onclick="hideCloseConfirm()">Keep Group Open</button>
+                            <button class="red-btn" onclick="closeGroup()">Confirm Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var groupId = new URLSearchParams(window.location.search).get("id");
+
+        var manageData = {
+            student: {
+                student_id: 1,
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            group: {
+                group_id: 1,
+                group_name: "CS 576 Study Group",
+                course_id: 16,
+                course_code: "CS 576",
+                course_name: "Computer Networks and Distributed Systems",
+                meeting_location: "Science Library 204",
+                meeting_format: "in_person",
+                maximum_capacity: 8,
+                creator_id: 1,
+                leader_id: 1,
+                created_at: "2026-08-24 10:00:00",
+                is_closed: false // TODO: not in database yet, needs a column to close groups
+            },
+            meeting_times: [
+                { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+            ],
+            members: [
+                { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science", joined_at: "2026-08-24 10:00:00" },
+                { student_id: 9, first_name: "Avery", last_name: "Morgan", major: "Information Systems", joined_at: "2026-09-03 14:12:00" },
+                { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Science", joined_at: "2026-09-08 09:30:00" },
+                { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science", joined_at: "2026-09-12 18:45:00" },
+                { student_id: 11, first_name: "Micah", last_name: "Kim", major: "Applied Mathematics", joined_at: "2026-09-21 11:05:00" }
+            ]
+        };
+
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var removingId = null;
+
+        document.getElementById("userInfo").innerHTML = manageData.student.first_name + " " + manageData.student.last_name + " &middot; " + manageData.student.major;
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+
+            if (minutes == "00") {
+                return hour + " " + ampm;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        function formatDuration(start, end) {
+            var s = start.split(":");
+            var e = end.split(":");
+            var minutes = (parseInt(e[0]) * 60 + parseInt(e[1])) - (parseInt(s[0]) * 60 + parseInt(s[1]));
+
+            if (minutes == 60) {
+                return "1 hour";
+            }
+            if (minutes % 60 == 0) {
+                return (minutes / 60) + " hours";
+            }
+            return minutes + " minutes";
+        }
+
+        function formatMeeting(format) {
+            if (format == "in_person") {
+                return "In person";
+            } else if (format == "online") {
+                return "Online";
+            } else if (format == "hybrid") {
+                return "Hybrid";
+            }
+            return format;
+        }
+
+        // "2026-09-03 14:12:00" -> "Sep 3"
+        function formatDate(dateTime) {
+            var parts = dateTime.split(" ")[0].split("-");
+            return monthNames[parseInt(parts[1]) - 1] + " " + parseInt(parts[2]);
+        }
+
+        function spacesText(spaces) {
+            if (spaces == 1) {
+                return "1 space";
+            }
+            return spaces + " spaces";
+        }
+
+        function showSummary() {
+            var group = manageData.group;
+            var count = manageData.members.length;
+            var spaces = group.maximum_capacity - count;
+
+            document.getElementById("subtitle").innerText = "Update " + group.group_name + ", manage membership, and keep meeting details accurate.";
+            document.getElementById("groupName").innerText = group.group_name;
+            document.getElementById("courseName").innerText = group.course_name;
+
+            var main = "";
+            var sub = "";
+            for (var i = 0; i < manageData.meeting_times.length; i++) {
+                var t = manageData.meeting_times[i];
+                if (i > 0) {
+                    main += ", ";
+                }
+                main += t.day_of_week.charAt(0).toUpperCase() + t.day_of_week.substring(1) + "s &middot; " + formatTime(t.start_time);
+                sub = formatDuration(t.start_time, t.end_time) + " &middot; Weekly";
+            }
+            document.getElementById("meetingMain").innerHTML = main;
+            document.getElementById("meetingSub").innerHTML = sub;
+
+            document.getElementById("locationMain").innerText = group.meeting_location;
+            document.getElementById("locationSub").innerText = formatMeeting(group.meeting_format);
+
+            document.getElementById("capacityMain").innerText = count + " of " + group.maximum_capacity + " occupied";
+            document.getElementById("capacitySub").innerText = spacesText(spaces) + " available";
+            document.getElementById("occupiedText").innerText = count + " occupied";
+            document.getElementById("availableText").innerText = spaces + " available";
+            document.getElementById("barFill").style.width = (count / group.maximum_capacity * 100) + "%";
+            document.getElementById("memberCount").innerText = count + " of " + group.maximum_capacity + " students";
+
+            var badge = document.getElementById("statusBadge");
+            if (group.is_closed) {
+                badge.className = "badge red";
+                badge.innerText = "Closed";
+            } else if (spaces <= 0) {
+                badge.className = "badge red";
+                badge.innerText = "Full";
+            } else {
+                badge.className = "badge green";
+                badge.innerText = "Open";
+            }
+        }
+
+        function showMembers() {
+            var group = manageData.group;
+            var html = "";
+
+            for (var i = 0; i < manageData.members.length; i++) {
+                var m = manageData.members[i];
+                var initials = m.first_name.charAt(0) + m.last_name.charAt(0);
+                var name = m.first_name + " " + m.last_name;
+                var date = "Joined " + formatDate(m.joined_at);
+                var action = '<button class="red-btn" onclick="askRemove(' + m.student_id + ')">Remove Member</button>';
+                var leaderBadge = "";
+
+                if (m.student_id == group.leader_id) {
+                    leaderBadge = '<span class="badge blue">Group leader</span>';
+                    date = "Created " + formatDate(group.created_at);
+                    action = "Owner";
+                } else if (group.is_closed) {
+                    action = "";
+                }
+
+                html +=
+                    '<div class="member">' +
+                        '<div class="avatar c' + (i % 4) + '">' + initials + '</div>' +
+                        '<div class="member-name">' + name + leaderBadge + '<p class="small">' + m.major + '</p></div>' +
+                        '<div class="member-date">' + date + '</div>' +
+                        '<div class="member-action">' + action + '</div>' +
+                    '</div>';
+
+                if (m.student_id == removingId) {
+                    html +=
+                        '<div class="confirm">' +
+                            '<div>' +
+                                '<b>Remove ' + name + '?</b>' +
+                                '<p>' + m.first_name + ' will lose access to this group. They can join again later if there\'s space.</p>' +
+                            '</div>' +
+                            '<div>' +
+                                '<button class="plain-btn" onclick="cancelRemove()">Cancel</button>' +
+                                '<button class="red-btn" onclick="removeMember(' + m.student_id + ')">Remove Member</button>' +
+                            '</div>' +
+                        '</div>';
+                }
+            }
+
+            document.getElementById("memberList").innerHTML = html;
+        }
+
+        function askRemove(studentId) {
+            removingId = studentId;
+            showMembers();
+        }
+
+        function cancelRemove() {
+            removingId = null;
+            showMembers();
+        }
+
+        function removeMember(studentId) {
+            var name = "";
+            for (var i = 0; i < manageData.members.length; i++) {
+                if (manageData.members[i].student_id == studentId) {
+                    name = manageData.members[i].first_name + " " + manageData.members[i].last_name;
+                    manageData.members.splice(i, 1);
+                    break;
+                }
+            }
+            removingId = null;
+            // TODO: send to the backend when its connected
+
+            var notice = document.getElementById("notice");
+            notice.innerHTML = "<b>&#10003; Member removed</b>" + name + " was removed from " + manageData.group.group_name + ". One space is now available.";
+            notice.style.display = "block";
+
+            showSummary();
+            showMembers();
+        }
+
+        function showCloseConfirm() {
+            document.getElementById("closeQuestion").innerText = "Are you sure you want to close " + manageData.group.group_name + "?";
+            document.getElementById("closeConfirm").style.display = "flex";
+        }
+
+        function hideCloseConfirm() {
+            document.getElementById("closeConfirm").style.display = "none";
+        }
+
+        function closeGroup() {
+            manageData.group.is_closed = true;
+            removingId = null;
+            // TODO: send to the backend when its connected
+
+            hideCloseConfirm();
+            document.getElementById("closeBtn").style.display = "none";
+
+            var notice = document.getElementById("notice");
+            notice.innerHTML = "<b>Group closed</b>" + manageData.group.group_name + " is closed. No one new can join.";
+            notice.style.display = "block";
+
+            showSummary();
+            showMembers();
+        }
+
+        if (manageData.student.student_id != manageData.group.leader_id) {
+            document.getElementById("leaderView").style.display = "none";
+            document.getElementById("editBtn").style.display = "none";
+            document.getElementById("notLeader").style.display = "block";
+        }
+
+        // TODO: create-group.html doesnt load an existing group for editing yet
+        document.getElementById("editBtn").href = "create-group.html?edit=" + manageData.group.group_id;
+
+        showSummary();
+        showMembers();
+    </script>
+</body>
+</html>

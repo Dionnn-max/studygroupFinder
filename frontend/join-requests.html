@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Join Requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .green {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .yellow {
+            background-color: #fdf1d8;
+            color: #a8700f;
+        }
+
+        .red {
+            background-color: #fde6e6;
+            color: #c0392b;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #6b7386;
+            margin: 4px 0 0 0;
+        }
+
+        .request {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background-color: #f5f8fd;
+            border: 1px solid #e4e7ee;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .person {
+            display: flex;
+            align-items: center;
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 10px;
+            background-color: #ebe4fb;
+            color: #6a48c9;
+        }
+
+        .avatar.c1 {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .avatar.c2 {
+            background-color: #fdf1d8;
+            color: #a8700f;
+        }
+
+        .person b {
+            font-size: 14px;
+        }
+
+        .person p {
+            font-size: 11px;
+            color: #6b7386;
+            margin: 2px 0 0 0;
+        }
+
+        .detail {
+            font-size: 12px;
+        }
+
+        .detail span {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            color: #6b7386;
+            margin-bottom: 3px;
+        }
+
+        .courses {
+            width: 140px;
+        }
+
+        .habits {
+            flex: 1;
+        }
+
+        .date {
+            width: 110px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .reject-btn {
+            padding: 8px 12px;
+            border: 1px solid #f3c4c4;
+            border-radius: 8px;
+            background-color: #fdeeee;
+            color: #c0392b;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .approve-btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2452a6;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .approve-btn:hover {
+            background-color: #1c4390;
+        }
+
+        .error {
+            font-size: 11px;
+            color: #c0392b;
+            margin: 8px 0 0 0;
+        }
+
+        .section-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        .section-top h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .section-top span {
+            font-size: 11px;
+            color: #6b7386;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .decision {
+            width: calc(50% - 7px);
+            margin-bottom: 0;
+        }
+
+        .decision .person {
+            width: auto;
+        }
+
+        .info-card {
+            display: flex;
+            align-items: center;
+            background-color: #e8eefb;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 12px;
+            color: #2452a6;
+            margin-top: 16px;
+        }
+
+        .info-card .icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .info-card p {
+            margin: 3px 0 0 0;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .request {
+                flex-wrap: wrap;
+            }
+            .person,
+            .courses,
+            .habits,
+            .date {
+                width: 45%;
+            }
+            .decision {
+                width: 100%;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html" class="active">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                <span id="userInfo"></span>
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top-row">
+                <div>
+                    <h1>Join Requests</h1>
+                    <p class="subtitle">Review students who want to join the groups you lead.</p>
+                </div>
+                <span class="badge yellow" id="totalBadge"></span>
+            </div>
+
+            <div id="groupList"></div>
+
+            <div class="info-card" id="emptyState">
+                <div class="icon">i</div>
+                <div>
+                    <b>No requests to review</b>
+                    <p>When a student requests to join one of your groups, their profile and study preferences will appear here.</p>
+                </div>
+            </div>
+
+            <div class="section-top">
+                <h2>Recent decisions</h2>
+                <span>Last 7 days</span>
+            </div>
+            <div class="row" id="decisionList"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // TODO: join requests are Phase 2 (Phase 1 is open-join only), and there is no join_requests table in the database yet
+        var requestsData = {
+            student: {
+                student_id: 1,
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            groups: [
+                {
+                    group_id: 1,
+                    group_name: "CS 576 Study Group",
+                    course_name: "Computer Networks and Distributed Systems",
+                    meeting_location: "Science Library 204",
+                    member_count: 5,
+                    maximum_capacity: 8,
+                    leader_id: 1,
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+                    ]
+                },
+                {
+                    group_id: 5,
+                    group_name: "CS 450 Study Group",
+                    course_name: "Introduction to Artificial Intelligence",
+                    meeting_location: "Zoom",
+                    member_count: 4,
+                    maximum_capacity: 6,
+                    leader_id: 1,
+                    meeting_times: [
+                        { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
+                    ]
+                }
+            ],
+            requests: [
+                {
+                    request_id: 1,
+                    group_id: 1,
+                    status: "pending",
+                    requested_at: "2026-10-09 15:20:00",
+                    decided_at: "",
+                    student: { student_id: 12, first_name: "Sam", last_name: "Rivera", major: "Information Systems", course_codes: ["CS 576", "CS 370"], study_habits: "Collaborative problem solving; weekly review" }
+                },
+                {
+                    request_id: 2,
+                    group_id: 1,
+                    status: "pending",
+                    requested_at: "2026-10-10 09:05:00",
+                    decided_at: "",
+                    student: { student_id: 13, first_name: "Lena", last_name: "Park", major: "Computer Science", course_codes: ["CS 576", "CS 450"], study_habits: "Quiet focus, then compare solutions" }
+                },
+                {
+                    request_id: 3,
+                    group_id: 5,
+                    status: "pending",
+                    requested_at: "2026-10-11 20:40:00",
+                    decided_at: "",
+                    student: { student_id: 14, first_name: "Noah", last_name: "Singh", major: "Applied Mathematics", course_codes: ["CS 450", "CS 460"], study_habits: "Practice exams and concept mapping" }
+                },
+                {
+                    request_id: 4,
+                    group_id: 1,
+                    status: "approved",
+                    requested_at: "2026-10-07 13:00:00",
+                    decided_at: "2026-10-09 10:15:00",
+                    student: { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science", course_codes: ["CS 576"], study_habits: "Weekly review" }
+                },
+                {
+                    request_id: 5,
+                    group_id: 5,
+                    status: "rejected",
+                    requested_at: "2026-10-06 18:30:00",
+                    decided_at: "2026-10-08 17:45:00",
+                    student: { student_id: 15, first_name: "Eli", last_name: "Torres", major: "Computer Science", course_codes: ["CS 450"], study_habits: "Silent study" }
+                }
+            ]
+        };
+
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var errorRequest = null;
+
+        document.getElementById("userInfo").innerHTML = requestsData.student.first_name + " " + requestsData.student.last_name + " &middot; " + requestsData.student.major;
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        // "2026-09-29 15:20:00" -> "Sep 29, 2026"
+        function formatDate(dateTime, withYear) {
+            var parts = dateTime.split(" ")[0].split("-");
+            var text = monthNames[parseInt(parts[1]) - 1] + " " + parseInt(parts[2]);
+            if (withYear) {
+                text += ", " + parts[0];
+            }
+            return text;
+        }
+
+        function toDate(dateTime) {
+            var parts = dateTime.split(" ")[0].split("-");
+            return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        }
+
+        // "2026-10-13 19:03:00" for right now, same format as the database
+        function nowText() {
+            var now = new Date();
+            var m = now.getMonth() + 1;
+            var day = now.getDate();
+            if (m < 10) {
+                m = "0" + m;
+            }
+            if (day < 10) {
+                day = "0" + day;
+            }
+            return now.getFullYear() + "-" + m + "-" + day + " " + now.toTimeString().substring(0, 8);
+        }
+
+        function getGroup(id) {
+            for (var i = 0; i < requestsData.groups.length; i++) {
+                if (requestsData.groups[i].group_id == id) {
+                    return requestsData.groups[i];
+                }
+            }
+            return null;
+        }
+
+        function getRequest(id) {
+            for (var i = 0; i < requestsData.requests.length; i++) {
+                if (requestsData.requests[i].request_id == id) {
+                    return requestsData.requests[i];
+                }
+            }
+            return null;
+        }
+
+        function meetingText(group) {
+            var text = "";
+            for (var i = 0; i < group.meeting_times.length; i++) {
+                var t = group.meeting_times[i];
+                if (i > 0) {
+                    text += ", ";
+                }
+                text += t.day_of_week.charAt(0).toUpperCase() + t.day_of_week.substring(1) + "s, " + formatTime(t.start_time);
+            }
+            return text;
+        }
+
+        function showRequests() {
+            var me = requestsData.student.student_id;
+            var html = "";
+            var total = 0;
+
+            for (var g = 0; g < requestsData.groups.length; g++) {
+                var group = requestsData.groups[g];
+                if (group.leader_id != me) {
+                    continue;
+                }
+
+                var rows = "";
+                var count = 0;
+
+                for (var i = 0; i < requestsData.requests.length; i++) {
+                    var r = requestsData.requests[i];
+                    if (r.group_id != group.group_id || r.status != "pending") {
+                        continue;
+                    }
+
+                    var s = r.student;
+                    var error = "";
+                    if (errorRequest == r.request_id) {
+                        error = '<p class="error">This group is full, remove a member or raise the capacity first.</p>';
+                    }
+
+                    rows +=
+                        '<div class="request">' +
+                            '<div class="person">' +
+                                '<div class="avatar c' + (count % 3) + '">' + s.first_name.charAt(0) + s.last_name.charAt(0) + '</div>' +
+                                '<div><b>' + s.first_name + ' ' + s.last_name + '</b><p>' + s.major + '</p></div>' +
+                            '</div>' +
+                            '<div class="detail courses"><span>COURSES</span>' + s.course_codes.join(", ") + '</div>' +
+                            '<div class="detail habits"><span>STUDY HABITS</span>' + s.study_habits + '</div>' +
+                            '<div class="detail date"><span>REQUESTED</span>' + formatDate(r.requested_at, true) + '</div>' +
+                            '<div class="actions">' +
+                                '<button class="reject-btn" onclick="decide(' + r.request_id + ', \'rejected\')">Reject</button>' +
+                                '<button class="approve-btn" onclick="decide(' + r.request_id + ', \'approved\')">Approve</button>' +
+                            '</div>' +
+                        '</div>' + error;
+                    count++;
+                }
+
+                if (count == 0) {
+                    continue;
+                }
+                total += count;
+
+                html +=
+                    '<div class="card">' +
+                        '<div class="card-top">' +
+                            '<div>' +
+                                '<h3>' + group.group_name + '</h3>' +
+                                '<p class="small">' + group.course_name + ' &middot; ' + meetingText(group) + ' &middot; ' + group.meeting_location +
+                                ' &middot; ' + group.member_count + '/' + group.maximum_capacity + '</p>' +
+                            '</div>' +
+                            '<span class="badge yellow">' + count + ' pending</span>' +
+                        '</div>' +
+                        rows +
+                    '</div>';
+            }
+
+            document.getElementById("groupList").innerHTML = html;
+            document.getElementById("totalBadge").innerText = total + " pending";
+
+            if (total == 0) {
+                document.getElementById("emptyState").style.display = "flex";
+                document.getElementById("totalBadge").style.display = "none";
+            } else {
+                document.getElementById("emptyState").style.display = "none";
+                document.getElementById("totalBadge").style.display = "inline";
+            }
+        }
+
+        function showDecisions() {
+            var weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            var html = "";
+
+            for (var i = requestsData.requests.length - 1; i >= 0; i--) {
+                var r = requestsData.requests[i];
+                if (r.status == "pending" || toDate(r.decided_at) < weekAgo) {
+                    continue;
+                }
+                var group = getGroup(r.group_id);
+                var s = r.student;
+                var badge = '<span class="badge green">Approved</span>';
+                var text = "Approved ";
+                var color = "c1";
+                if (r.status == "rejected") {
+                    badge = '<span class="badge red">Rejected</span>';
+                    text = "Rejected ";
+                    color = "c2";
+                }
+
+                html +=
+                    '<div class="card decision">' +
+                        '<div class="card-top">' +
+                            '<div class="person">' +
+                                '<div class="avatar ' + color + '">' + s.first_name.charAt(0) + s.last_name.charAt(0) + '</div>' +
+                                '<div><b>' + s.first_name + ' ' + s.last_name + '</b><p>' + group.group_name + '</p></div>' +
+                            '</div>' +
+                            badge +
+                        '</div>' +
+                        '<p class="small">' + text + formatDate(r.decided_at, false) + '</p>' +
+                    '</div>';
+            }
+
+            if (html == "") {
+                html = '<p class="small">No decisions in the last 7 days.</p>';
+            }
+            document.getElementById("decisionList").innerHTML = html;
+        }
+
+        function decide(requestId, status) {
+            var r = getRequest(requestId);
+            var group = getGroup(r.group_id);
+            errorRequest = null;
+
+            if (status == "approved") {
+                if (group.member_count >= group.maximum_capacity) {
+                    errorRequest = requestId;
+                    showRequests();
+                    return;
+                }
+                group.member_count++;
+            }
+
+            r.status = status;
+            r.decided_at = nowText();
+            // TODO: send the decision to the backend when its connected
+
+            showRequests();
+            showDecisions();
+        }
+
+        showRequests();
+        showDecisions();
+    </script>
+</body>
+</html>
