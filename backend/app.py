@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import get_db_connection
+from backend.db import get_db_connection
 
 
 load_dotenv(Path(__file__).with_name(".env"))
