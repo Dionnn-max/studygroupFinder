@@ -301,13 +301,6 @@
                             <div class="input-box">
                                 <select id="major" name="major" required>
                                     <option value=""></option>
-                                    <option>Computer Science</option>
-                                    <option>Computer Engineering</option>
-                                    <option>Mathematics</option>
-                                    <option>Biology</option>
-                                    <option>Business</option>
-                                    <option>Psychology</option>
-                                    <option>Other</option>
                                 </select>
                             </div>
                         </div>
@@ -358,6 +351,14 @@
     </div>
 
     <script>
+        // TODO: there is no majors table, this list is only on the frontend for now
+        var majors = ["Computer Science", "Computer Engineering", "Mathematics", "Biology", "Business", "Psychology", "Other"];
+
+        var majorSelect = document.getElementById("major");
+        for (var i = 0; i < majors.length; i++) {
+            majorSelect.innerHTML += "<option>" + majors[i] + "</option>";
+        }
+
         var form = document.getElementById("registerForm");
         var message = document.getElementById("message");
 

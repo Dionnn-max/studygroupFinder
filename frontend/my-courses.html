@@ -351,7 +351,7 @@
             <a href="profile.html">Profile Settings</a>
 
             <div class="user-info">
-                Dion Chen &middot; Computer Science
+                <span id="userInfo"></span>
                 <a href="login.html">&#8599; Log Out</a>
             </div>
         </div>
@@ -365,13 +365,6 @@
                 <div class="add-row">
                     <select id="courseSelect">
                         <option value="">Search and select an SDSU CS course</option>
-                        <option value="CS 370|Computer Architecture">CS 370 Computer Architecture</option>
-                        <option value="CS 420|Advanced Programming Languages">CS 420 Advanced Programming Languages</option>
-                        <option value="CS 450|Introduction to Artificial Intelligence">CS 450 Introduction to Artificial Intelligence</option>
-                        <option value="CS 460|Algorithms">CS 460 Algorithms</option>
-                        <option value="CS 480|Operating Systems">CS 480 Operating Systems</option>
-                        <option value="CS 514|Database Theory and Implementation">CS 514 Database Theory and Implementation</option>
-                        <option value="CS 576|Computer Networks and Distributed Systems">CS 576 Computer Networks and Distributed Systems</option>
                     </select>
                     <button class="add-btn" onclick="addCourse()">+ &nbsp;Add Course</button>
                 </div>
@@ -380,51 +373,10 @@
 
             <div class="section-top">
                 <h2>Current courses</h2>
-                <span id="count">3 courses</span>
+                <span id="count"></span>
             </div>
 
-            <!-- hardcoded for now, later these come from the Enrollments table -->
-            <div class="course-list" id="courseList">
-                <div class="course-card">
-                    <div class="card-top">
-                        <div>
-                            <span class="code">CS 576</span>
-                            <h3>Computer Networks and Distributed Systems</h3>
-                        </div>
-                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
-                    </div>
-                    <div class="card-bottom">
-                        <span><span class="dot"></span>4 matching groups</span>
-                        <a href="find-groups.html" class="find-btn">Find Groups</a>
-                    </div>
-                </div>
-                <div class="course-card green">
-                    <div class="card-top">
-                        <div>
-                            <span class="code">CS 450</span>
-                            <h3>Introduction to Artificial Intelligence</h3>
-                        </div>
-                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
-                    </div>
-                    <div class="card-bottom">
-                        <span><span class="dot"></span>3 matching groups</span>
-                        <a href="find-groups.html" class="find-btn">Find Groups</a>
-                    </div>
-                </div>
-                <div class="course-card purple">
-                    <div class="card-top">
-                        <div>
-                            <span class="code">CS 370</span>
-                            <h3>Computer Architecture</h3>
-                        </div>
-                        <button class="remove-btn" onclick="removeCourse(this)">&times;</button>
-                    </div>
-                    <div class="card-bottom">
-                        <span><span class="dot"></span>6 matching groups</span>
-                        <a href="find-groups.html" class="find-btn">Find Groups</a>
-                    </div>
-                </div>
-            </div>
+            <div class="course-list" id="courseList"></div>
 
             <div class="tip">
                 <div class="tip-icon">&#10022;</div>
@@ -438,10 +390,41 @@
     </div>
 
     <script>
+        // TODO: replace with fetch() calls to the backend (/api/auth/me, /api/courses and the students enrollments)
+        var coursesData = {
+            student: {
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            allCourses: [
+                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture" },
+                { course_id: 15, course_code: "CS 420", course_name: "Advanced Programming Languages" },
+                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence" },
+                { course_id: 8, course_code: "CS 460", course_name: "Algorithms" },
+                { course_id: 9, course_code: "CS 480", course_name: "Operating Systems" },
+                { course_id: 11, course_code: "CS 514", course_name: "Database Theory and Implementation" },
+                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" }
+            ],
+            myCourses: [
+                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems", group_count: 4 },
+                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence", group_count: 3 },
+                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture", group_count: 6 }
+            ]
+        };
+
         var colors = ["", "green", "purple"];
 
+        document.getElementById("userInfo").innerHTML = coursesData.student.first_name + " " + coursesData.student.last_name + " &middot; " + coursesData.student.major;
+
+        var select = document.getElementById("courseSelect");
+        for (var i = 0; i < coursesData.allCourses.length; i++) {
+            var course = coursesData.allCourses[i];
+            select.innerHTML += '<option value="' + course.course_id + '">' + course.course_code + " " + course.course_name + "</option>";
+        }
+
         function updateCount() {
-            var total = document.getElementsByClassName("course-card").length;
+            var total = coursesData.myCourses.length;
             if (total == 1) {
                 document.getElementById("count").innerText = "1 course";
             } else {
@@ -449,8 +432,35 @@
             }
         }
 
+        function showCourses() {
+            var list = document.getElementById("courseList");
+            var html = "";
+
+            for (var i = 0; i < coursesData.myCourses.length; i++) {
+                var course = coursesData.myCourses[i];
+                var groupText = course.group_count + " matching groups";
+                if (course.group_count == 1) {
+                    groupText = "1 matching group";
+                }
+
+                html +=
+                    '<div class="course-card ' + colors[i % 3] + '">' +
+                        '<div class="card-top">' +
+                            '<div><span class="code">' + course.course_code + '</span><h3>' + course.course_name + '</h3></div>' +
+                            '<button class="remove-btn" onclick="removeCourse(' + course.course_id + ')">&times;</button>' +
+                        '</div>' +
+                        '<div class="card-bottom">' +
+                            '<span><span class="dot"></span>' + groupText + '</span>' +
+                            '<a href="find-groups.html?course_id=' + course.course_id + '" class="find-btn">Find Groups</a>' +
+                        '</div>' +
+                    '</div>';
+            }
+
+            list.innerHTML = html;
+            updateCount();
+        }
+
         function addCourse() {
-            var select = document.getElementById("courseSelect");
             var error = document.getElementById("error");
             error.innerText = "";
 
@@ -459,45 +469,45 @@
                 return;
             }
 
-            var parts = select.value.split("|");
-            var code = parts[0];
-            var name = parts[1];
+            var picked = null;
+            for (var i = 0; i < coursesData.allCourses.length; i++) {
+                if (coursesData.allCourses[i].course_id == select.value) {
+                    picked = coursesData.allCourses[i];
+                }
+            }
 
             // dont let them add the same course twice
-            var codes = document.getElementsByClassName("code");
-            for (var i = 0; i < codes.length; i++) {
-                if (codes[i].innerText == code) {
-                    error.innerText = "You already added " + code;
+            for (var i = 0; i < coursesData.myCourses.length; i++) {
+                if (coursesData.myCourses[i].course_id == picked.course_id) {
+                    error.innerText = "You already added " + picked.course_code;
                     return;
                 }
             }
 
-            var list = document.getElementById("courseList");
-            var color = colors[list.children.length % 3];
-
-            var card = document.createElement("div");
-            card.className = "course-card " + color;
-            card.innerHTML =
-                '<div class="card-top">' +
-                    '<div><span class="code">' + code + '</span><h3>' + name + '</h3></div>' +
-                    '<button class="remove-btn" onclick="removeCourse(this)">&times;</button>' +
-                '</div>' +
-                '<div class="card-bottom">' +
-                    '<span><span class="dot"></span>0 matching groups</span>' +
-                    '<a href="find-groups.html" class="find-btn">Find Groups</a>' +
-                '</div>';
-            list.appendChild(card);
+            coursesData.myCourses.push({
+                course_id: picked.course_id,
+                course_code: picked.course_code,
+                course_name: picked.course_name,
+                group_count: 0
+            });
 
             select.value = "";
-            updateCount();
+            showCourses();
             // TODO: save to the backend when its ready
         }
 
-        function removeCourse(btn) {
-            btn.parentElement.parentElement.remove();
-            updateCount();
+        function removeCourse(courseId) {
+            for (var i = 0; i < coursesData.myCourses.length; i++) {
+                if (coursesData.myCourses[i].course_id == courseId) {
+                    coursesData.myCourses.splice(i, 1);
+                    break;
+                }
+            }
+            showCourses();
             // TODO: delete from the backend too
         }
+
+        showCourses();
     </script>
 </body>
 </html>

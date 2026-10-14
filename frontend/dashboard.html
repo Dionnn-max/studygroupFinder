@@ -246,38 +246,37 @@
             <a href="profile.html">Profile Settings</a>
 
             <div class="user-info">
-                Dion Chen &middot; Computer Science
+                <span id="userInfo"></span>
                 <a href="login.html">&#8599; Log Out</a>
             </div>
         </div>
 
         <div class="main">
-            <!-- everything below is hardcoded for now, it should come from the database later -->
-            <h1>Welcome back, Dion</h1>
-            <p class="subtitle">One group meeting and two course deadlines are coming up this week.</p>
+            <h1 id="welcome"></h1>
+            <p class="subtitle" id="subtitle"></p>
 
             <a href="find-groups.html" class="btn">Search Groups</a>
             <a href="create-group.html" class="btn btn-blue">Create Group</a>
 
             <div class="row">
                 <div class="card">
-                    <h3>3 Active courses</h3>
-                    <p>CS 576 &middot; CS 370 &middot; CS 450</p>
+                    <h3 id="courseCount"></h3>
+                    <p id="courseCodes"></p>
                 </div>
                 <div class="card">
-                    <h3>2 Study groups</h3>
-                    <p>One upcoming meeting this week</p>
+                    <h3 id="groupCount"></h3>
+                    <p id="meetingNote"></p>
                 </div>
                 <div class="card">
-                    <h3>1 Pending request</h3>
-                    <p>CS 370 Study Group &middot; CS 370</p>
+                    <h3 id="requestCount"></h3>
+                    <p id="requestNames"></p>
                 </div>
             </div>
 
             <div class="row">
                 <div class="card">
                     <h3>My Courses</h3>
-                    <p>CS 576 Computer Networks and Distributed Systems &middot; CS 370 Computer Architecture &middot; CS 450 Introduction to Artificial Intelligence</p>
+                    <p id="courseList"></p>
                     <a href="my-courses.html" class="btn">View all courses</a>
                 </div>
             </div>
@@ -286,40 +285,219 @@
                 <div class="card">
                     <div class="card-top">
                         <h3>My Study Groups</h3>
-                        <span class="badge green">Open</span>
+                        <span class="badge" id="myGroupBadge"></span>
                     </div>
-                    <p>CS 576 Study Group &middot; Computer Networks and Distributed Systems &middot; Wed Oct 7 at 5:30 PM &middot; Science Library 204 &middot; 5/8</p>
-                    <a href="group-details.html" class="btn">View Group</a>
+                    <div id="myGroupList"></div>
                 </div>
                 <div class="card">
                     <div class="card-top">
                         <h3>Pending Join Requests</h3>
                         <span class="badge yellow">Pending</span>
                     </div>
-                    <p>CS 370 Study Group &middot; Computer Architecture &middot; Requested Sep 26</p>
+                    <div id="requestList"></div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="card">
-                    <div class="card-top">
-                        <h3>CS 576 Study Group</h3>
-                        <span class="badge blue">92% match</span>
-                    </div>
-                    <p>Computer Networks and Distributed Systems &middot; Wed 7 PM &middot; In person &middot; 6/8</p>
-                    <a href="group-details.html" class="btn">View Details</a>
-                </div>
-                <div class="card">
-                    <div class="card-top">
-                        <h3>CS 450 Study Group</h3>
-                        <span class="badge yellow">Approval Required</span>
-                    </div>
-                    <p>Introduction to Artificial Intelligence &middot; Thu 7 PM &middot; Online &middot; 4/6</p>
-                    <a href="group-details.html" class="btn">View Details</a>
-                </div>
-            </div>
+            <div class="row" id="suggestedList"></div>
         </div>
 
     </div>
+
+    <script>
+        // TODO: replace with fetch() calls to the backend once there are routes for the dashboard
+        var dashboardData = {
+            student: {
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            subtitle: "One group meeting and two course deadlines are coming up this week.", // TODO: not in database yet (no deadlines table), add or remove
+            meeting_note: "One upcoming meeting this week", // TODO: not in database yet, could be counted from group_meeting_times
+            courses: [
+                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" },
+                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture" },
+                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence" }
+            ],
+            myGroups: [
+                {
+                    group_id: 1,
+                    group_name: "CS 576 Study Group",
+                    course_name: "Computer Networks and Distributed Systems",
+                    next_meeting: "Wed Oct 7 at 5:30 PM", // TODO: not in database yet, group_meeting_times only has day_of_week and times
+                    meeting_location: "Science Library 204",
+                    member_count: 5,
+                    maximum_capacity: 8
+                }
+            ],
+            // TODO: join requests are not in Phase 1 (open-join only), probably remove this and the Pending cards
+            pendingRequests: [
+                {
+                    group_id: 2,
+                    group_name: "CS 370 Study Group",
+                    course_code: "CS 370",
+                    course_name: "Computer Architecture",
+                    requested_date: "Sep 26"
+                }
+            ],
+            suggestedGroups: [
+                {
+                    group_id: 4,
+                    group_name: "CS 576 Study Group",
+                    course_name: "Computer Networks and Distributed Systems",
+                    day_of_week: "wednesday",
+                    start_time: "19:00:00",
+                    meeting_format: "in_person",
+                    member_count: 6,
+                    maximum_capacity: 8,
+                    match_percent: 92 // TODO: not in database yet, add or remove
+                },
+                {
+                    group_id: 5,
+                    group_name: "CS 450 Study Group",
+                    course_name: "Introduction to Artificial Intelligence",
+                    day_of_week: "thursday",
+                    start_time: "19:00:00",
+                    meeting_format: "online",
+                    member_count: 4,
+                    maximum_capacity: 6,
+                    approval_required: true // TODO: not in Phase 1 (open-join only)
+                }
+            ]
+        };
+
+        function formatDay(day) {
+            return day.charAt(0).toUpperCase() + day.substring(1, 3);
+        }
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+
+            if (minutes == "00") {
+                return hour + " " + ampm;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        function formatMeeting(format) {
+            if (format == "in_person") {
+                return "In person";
+            } else if (format == "online") {
+                return "Online";
+            } else if (format == "hybrid") {
+                return "Hybrid";
+            }
+            return format;
+        }
+
+        var student = dashboardData.student;
+        var courses = dashboardData.courses;
+        var myGroups = dashboardData.myGroups;
+        var requests = dashboardData.pendingRequests;
+        var suggested = dashboardData.suggestedGroups;
+
+        document.getElementById("userInfo").innerHTML = student.first_name + " " + student.last_name + " &middot; " + student.major;
+        document.getElementById("welcome").innerText = "Welcome back, " + student.first_name;
+        document.getElementById("subtitle").innerText = dashboardData.subtitle;
+
+        var codes = "";
+        var names = "";
+        for (var i = 0; i < courses.length; i++) {
+            if (i > 0) {
+                codes += " &middot; ";
+                names += " &middot; ";
+            }
+            codes += courses[i].course_code;
+            names += courses[i].course_code + " " + courses[i].course_name;
+        }
+        if (courses.length == 1) {
+            document.getElementById("courseCount").innerText = "1 Active course";
+        } else {
+            document.getElementById("courseCount").innerText = courses.length + " Active courses";
+        }
+        document.getElementById("courseCodes").innerHTML = codes;
+        document.getElementById("courseList").innerHTML = names;
+
+        if (myGroups.length == 1) {
+            document.getElementById("groupCount").innerText = "1 Study group";
+        } else {
+            document.getElementById("groupCount").innerText = myGroups.length + " Study groups";
+        }
+        document.getElementById("meetingNote").innerText = dashboardData.meeting_note;
+
+        var requestNames = "";
+        for (var i = 0; i < requests.length; i++) {
+            if (i > 0) {
+                requestNames += " &middot; ";
+            }
+            requestNames += requests[i].group_name + " &middot; " + requests[i].course_code;
+        }
+        if (requests.length == 1) {
+            document.getElementById("requestCount").innerText = "1 Pending request";
+        } else {
+            document.getElementById("requestCount").innerText = requests.length + " Pending requests";
+        }
+        document.getElementById("requestNames").innerHTML = requestNames;
+
+        var html = "";
+        for (var i = 0; i < myGroups.length; i++) {
+            var group = myGroups[i];
+            html +=
+                '<p>' + group.group_name + ' &middot; ' + group.course_name + ' &middot; ' + group.next_meeting +
+                ' &middot; ' + group.meeting_location + ' &middot; ' + group.member_count + '/' + group.maximum_capacity + '</p>' +
+                '<a href="group-details.html?id=' + group.group_id + '" class="btn">View Group</a>';
+        }
+        document.getElementById("myGroupList").innerHTML = html;
+
+        var badge = document.getElementById("myGroupBadge");
+        if (myGroups.length == 0) {
+            badge.style.display = "none";
+        } else if (myGroups[0].member_count >= myGroups[0].maximum_capacity) {
+            badge.className = "badge yellow";
+            badge.innerText = "Full";
+        } else {
+            badge.className = "badge green";
+            badge.innerText = "Open";
+        }
+
+        html = "";
+        for (var i = 0; i < requests.length; i++) {
+            html += '<p>' + requests[i].group_name + ' &middot; ' + requests[i].course_name + ' &middot; Requested ' + requests[i].requested_date + '</p>';
+        }
+        document.getElementById("requestList").innerHTML = html;
+
+        html = "";
+        for (var i = 0; i < suggested.length; i++) {
+            var group = suggested[i];
+            var badgeHtml = '<span class="badge blue">' + group.match_percent + '% match</span>';
+            if (group.approval_required) {
+                badgeHtml = '<span class="badge yellow">Approval Required</span>';
+            }
+
+            html +=
+                '<div class="card">' +
+                    '<div class="card-top">' +
+                        '<h3>' + group.group_name + '</h3>' +
+                        badgeHtml +
+                    '</div>' +
+                    '<p>' + group.course_name + ' &middot; ' + formatDay(group.day_of_week) + ' ' + formatTime(group.start_time) +
+                    ' &middot; ' + formatMeeting(group.meeting_format) + ' &middot; ' + group.member_count + '/' + group.maximum_capacity + '</p>' +
+                    '<a href="group-details.html?id=' + group.group_id + '" class="btn">View Details</a>' +
+                '</div>';
+        }
+        document.getElementById("suggestedList").innerHTML = html;
+    </script>
 </body>
 </html>

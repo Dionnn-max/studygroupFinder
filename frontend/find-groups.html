@@ -348,7 +348,7 @@
             <a href="profile.html">Profile Settings</a>
 
             <div class="user-info">
-                Dion Chen &middot; Computer Science
+                <span id="userInfo"></span>
                 <a href="login.html">&#8599; Log Out</a>
             </div>
         </div>
@@ -373,9 +373,6 @@
                     <label for="major">Major</label>
                     <select id="major">
                         <option value="">Any</option>
-                        <option>Computer Science</option>
-                        <option>Computer Engineering</option>
-                        <option>Mathematics</option>
                     </select>
 
                     <label for="format">Meeting format</label>
@@ -404,37 +401,9 @@
                 </div>
 
                 <div class="results">
-                    <h2 id="resultCount">Search Results &middot; 3 groups</h2>
+                    <h2 id="resultCount"></h2>
 
-                    <!-- hardcoded groups for now, these should come from the Study Groups table -->
-                    <div class="group-list">
-                        <div class="group-card wide" data-format="In person">
-                            <div class="card-top">
-                                <h3>CS 576 Study Group</h3>
-                                <span class="badge green">Open</span>
-                            </div>
-                            <p>Computer Networks and Distributed Systems &middot; Wed 5:30 PM &middot; 90 min &middot; Science Library 204 &middot; In person &middot; Collaborative &middot; 5/8 &middot; 3 spaces</p>
-                            <a href="group-details.html" class="details-btn">View Details &middot; Request to Join</a>
-                        </div>
-
-                        <div class="group-card" data-format="Hybrid">
-                            <div class="card-top">
-                                <h3>CS 370 Study Group</h3>
-                                <span class="badge purple">Invite Only</span>
-                            </div>
-                            <p>Computer Architecture &middot; Tue 6 PM &middot; 2 hours &middot; Tech Hall + Discord &middot; Hybrid &middot; Project based &middot; 6/8</p>
-                            <a href="group-details.html" class="details-btn">View Details &middot; Invite Only</a>
-                        </div>
-
-                        <div class="group-card" data-format="In person">
-                            <div class="card-top">
-                                <h3>CS 576 Study Group</h3>
-                                <span class="badge red">Full</span>
-                            </div>
-                            <p>Computer Networks and Distributed Systems &middot; Sat 11 AM &middot; 90 min &middot; Engineering Commons &middot; In person &middot; Exam prep &middot; 8/8</p>
-                            <a href="group-details.html" class="details-btn">View Details &middot; Group Full</a>
-                        </div>
-                    </div>
+                    <div class="group-list" id="groupList"></div>
 
                     <p id="noResults">No groups found. Try a different course.</p>
                 </div>
@@ -444,6 +413,185 @@
     </div>
 
     <script>
+        // TODO: replace with fetch() calls to the backend (/api/auth/me and /api/groups)
+        var groupsData = {
+            student: {
+                first_name: "Dion",
+                last_name: "Chen",
+                major: "Computer Science"
+            },
+            majors: ["Computer Science", "Computer Engineering", "Mathematics"], // TODO: groups dont have a major in the database, decide what this filter means
+            groups: [
+                {
+                    group_id: 1,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    day_of_week: "wednesday",
+                    start_time: "17:30:00",
+                    end_time: "19:00:00",
+                    meeting_location: "Science Library 204",
+                    meeting_format: "in_person",
+                    study_style: "Collaborative", // TODO: not in database yet, add a column or remove
+                    member_count: 5,
+                    maximum_capacity: 8
+                },
+                {
+                    group_id: 2,
+                    group_name: "CS 370 Study Group",
+                    course_id: 6,
+                    course_code: "CS 370",
+                    course_name: "Computer Architecture",
+                    day_of_week: "tuesday",
+                    start_time: "18:00:00",
+                    end_time: "20:00:00",
+                    meeting_location: "Tech Hall + Discord",
+                    meeting_format: "hybrid",
+                    study_style: "Project based",
+                    member_count: 6,
+                    maximum_capacity: 8,
+                    invite_only: true // TODO: not in Phase 1 (open-join only), Full and Open are calculated from member_count
+                },
+                {
+                    group_id: 3,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    day_of_week: "saturday",
+                    start_time: "11:00:00",
+                    end_time: "12:30:00",
+                    meeting_location: "Engineering Commons",
+                    meeting_format: "in_person",
+                    study_style: "Exam prep",
+                    member_count: 8,
+                    maximum_capacity: 8
+                }
+            ]
+        };
+
+        document.getElementById("userInfo").innerHTML = groupsData.student.first_name + " " + groupsData.student.last_name + " &middot; " + groupsData.student.major;
+
+        var majorSelect = document.getElementById("major");
+        for (var i = 0; i < groupsData.majors.length; i++) {
+            majorSelect.innerHTML += "<option>" + groupsData.majors[i] + "</option>";
+        }
+
+        function formatDay(day) {
+            return day.charAt(0).toUpperCase() + day.substring(1, 3);
+        }
+
+        function formatTime(time) {
+            var parts = time.split(":");
+            var hour = parseInt(parts[0]);
+            var minutes = parts[1];
+            var ampm = "AM";
+
+            if (hour >= 12) {
+                ampm = "PM";
+            }
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+
+            if (minutes == "00") {
+                return hour + " " + ampm;
+            }
+            return hour + ":" + minutes + " " + ampm;
+        }
+
+        function formatDuration(start, end) {
+            var s = start.split(":");
+            var e = end.split(":");
+            var minutes = (parseInt(e[0]) * 60 + parseInt(e[1])) - (parseInt(s[0]) * 60 + parseInt(s[1]));
+
+            if (minutes == 60) {
+                return "1 hour";
+            }
+            if (minutes % 60 == 0) {
+                return (minutes / 60) + " hours";
+            }
+            return minutes + " min";
+        }
+
+        function formatMeeting(format) {
+            if (format == "in_person") {
+                return "In person";
+            } else if (format == "online") {
+                return "Online";
+            } else if (format == "hybrid") {
+                return "Hybrid";
+            }
+            return format;
+        }
+
+        function showGroups() {
+            var list = document.getElementById("groupList");
+            var html = "";
+
+            for (var i = 0; i < groupsData.groups.length; i++) {
+                var group = groupsData.groups[i];
+                var spaces = group.maximum_capacity - group.member_count;
+                var format = formatMeeting(group.meeting_format);
+                var badge = "";
+                var button = "";
+
+                if (group.invite_only) {
+                    badge = '<span class="badge purple">Invite Only</span>';
+                    button = "Invite Only";
+                } else if (spaces <= 0) {
+                    badge = '<span class="badge red">Full</span>';
+                    button = "Group Full";
+                } else {
+                    badge = '<span class="badge green">Open</span>';
+                    button = "Request to Join"; // TODO: Phase 1 joins right away, maybe change to Join Group
+                }
+
+                var info = group.course_name +
+                    " &middot; " + formatDay(group.day_of_week) + " " + formatTime(group.start_time) +
+                    " &middot; " + formatDuration(group.start_time, group.end_time) +
+                    " &middot; " + group.meeting_location +
+                    " &middot; " + format +
+                    " &middot; " + group.study_style +
+                    " &middot; " + group.member_count + "/" + group.maximum_capacity;
+
+                if (!group.invite_only && spaces > 0) {
+                    if (spaces == 1) {
+                        info += " &middot; 1 space";
+                    } else {
+                        info += " &middot; " + spaces + " spaces";
+                    }
+                }
+
+                var cardClass = "group-card";
+                if (i == 0) {
+                    cardClass = "group-card wide";
+                }
+
+                html +=
+                    '<div class="' + cardClass + '" data-format="' + format + '">' +
+                        '<div class="card-top">' +
+                            '<h3>' + group.group_name + '</h3>' +
+                            badge +
+                        '</div>' +
+                        '<p>' + info + '</p>' +
+                        '<a href="group-details.html?id=' + group.group_id + '" class="details-btn">View Details &middot; ' + button + '</a>' +
+                    '</div>';
+            }
+
+            list.innerHTML = html;
+
+            if (groupsData.groups.length == 1) {
+                document.getElementById("resultCount").innerHTML = "Search Results &middot; 1 group";
+            } else {
+                document.getElementById("resultCount").innerHTML = "Search Results &middot; " + groupsData.groups.length + " groups";
+            }
+        }
+
         function searchGroups() {
             var text = document.getElementById("searchBox").value.toLowerCase();
             var format = document.getElementById("format").value;
@@ -497,6 +645,8 @@
                 searchGroups();
             }
         });
+
+        showGroups();
     </script>
 </body>
 </html>
