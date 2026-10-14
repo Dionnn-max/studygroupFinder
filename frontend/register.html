@@ -312,10 +312,6 @@
                             <div class="input-box">
                                 <select id="gender" name="gender">
                                     <option value=""></option>
-                                    <option>Female</option>
-                                    <option>Male</option>
-                                    <option>Non-binary</option>
-                                    <option>Prefer not to say</option>
                                 </select>
                             </div>
                         </div>
@@ -351,12 +347,19 @@
     </div>
 
     <script>
-        // TODO: there is no majors table, this list is only on the frontend for now
-        var majors = ["Computer Science", "Computer Engineering", "Mathematics", "Biology", "Business", "Psychology", "Other"];
+        var registerData = {
+            majors: ["Computer Science", "Computer Engineering", "Mathematics", "Biology", "Business", "Psychology", "Other"], // TODO: there is no majors table, this list is only on the frontend for now
+            genders: ["Female", "Male", "Non-binary", "Prefer not to say"]
+        };
 
         var majorSelect = document.getElementById("major");
-        for (var i = 0; i < majors.length; i++) {
-            majorSelect.innerHTML += "<option>" + majors[i] + "</option>";
+        for (var i = 0; i < registerData.majors.length; i++) {
+            majorSelect.innerHTML += "<option>" + registerData.majors[i] + "</option>";
+        }
+
+        var genderSelect = document.getElementById("gender");
+        for (var i = 0; i < registerData.genders.length; i++) {
+            genderSelect.innerHTML += "<option>" + registerData.genders[i] + "</option>";
         }
 
         var form = document.getElementById("registerForm");
@@ -384,9 +387,8 @@
                 return;
             }
 
-            // TODO: send this to the backend when its ready
-            console.log("register clicked: " + email);
-            message.innerText = "Looks good, but registration isn't connected to the backend yet.";
+            // TODO: send this to the backend (POST /api/auth/signup) before going to the login page
+            window.location.href = "login.html";
         });
     </script>
 </body>

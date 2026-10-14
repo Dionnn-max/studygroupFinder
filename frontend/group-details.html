@@ -305,9 +305,7 @@
     </div>
 
     <script>
-        // TODO: replace with fetch() calls to the backend (/api/auth/me and a GET /api/groups/<id> route, which doesnt exist yet)
-        var groupId = new URLSearchParams(window.location.search).get("id");
-
+        // TODO: replace with fetch() calls to the backend. There's no GET route for one group yet.
         var groupData = {
             student: {
                 student_id: 1,
@@ -315,39 +313,235 @@
                 last_name: "Chen",
                 major: "Computer Science"
             },
-            group: {
-                group_id: 1,
-                group_name: "CS 576 Study Group",
-                course_id: 16,
-                course_code: "CS 576",
-                course_name: "Computer Networks and Distributed Systems",
-                tagline: "A focused, friendly networking study group.", // TODO: not in database, use description or add a column
-                description: "Weekly lecture review, routing and subnetting problems, and exam prep.",
-                meeting_location: "Science Library Room 204",
-                meeting_format: "in_person",
-                study_style: "Collaborative problem solving", // TODO: not in database yet, add a column or remove
-                major_preference: "Any major welcome", // TODO: not in database yet
-                gender_preference: "No gender preference", // TODO: not in database yet
-                maximum_capacity: 8,
-                creator_id: 2,
-                leader_id: 2
-            },
-            meeting_times: [
-                { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
-            ],
-            members: [
-                { student_id: 2, first_name: "Maya", last_name: "Chen", major: "Computer Science" },
-                { student_id: 3, first_name: "Alex", last_name: "Morgan", major: "Computer Science" },
-                { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Engineering" },
-                { student_id: 5, first_name: "Noah", last_name: "Patel", major: "Computer Science" },
-                { student_id: 6, first_name: "Sofia", last_name: "Ortiz", major: "Mathematics" }
+            groups: [
+                {
+                    group_id: 1,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    tagline: "A focused, friendly networking study group.", // TODO: not in database, use description or add a column
+                    description: "Weekly lecture review, routing and subnetting problems, and exam prep.",
+                    meeting_format: "in_person",
+                    meeting_location: "Science Library 204",
+                    maximum_capacity: 8,
+                    leader_id: 1,
+                    study_style: "Collaborative problem solving", // TODO: not in database yet, add a column or remove
+                    major_preference: "Any major welcome", // TODO: not in database yet
+                    gender_preference: "No gender preference", // TODO: not in database yet
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+                    ],
+                    members: [
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 9, first_name: "Avery", last_name: "Morgan", major: "Information Systems" },
+                        { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Science" },
+                        { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science" },
+                        { student_id: 11, first_name: "Micah", last_name: "Kim", major: "Applied Mathematics" }
+                    ]
+                },
+                {
+                    group_id: 2,
+                    group_name: "CS 370 Study Group",
+                    course_id: 6,
+                    course_code: "CS 370",
+                    course_name: "Computer Architecture",
+                    tagline: "Hands-on help with labs and projects.",
+                    description: "We work through the weekly labs together and review for the midterm and final.",
+                    meeting_format: "hybrid",
+                    meeting_location: "Tech Hall + Discord",
+                    maximum_capacity: 8,
+                    leader_id: 7,
+                    study_style: "Project based",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "tuesday", start_time: "18:00:00", end_time: "20:00:00" }
+                    ],
+                    members: [
+                        { student_id: 7, first_name: "Ethan", last_name: "Nguyen", major: "Computer Engineering" },
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 3, first_name: "Alex", last_name: "Morgan", major: "Computer Science" },
+                        { student_id: 5, first_name: "Noah", last_name: "Patel", major: "Computer Science" },
+                        { student_id: 18, first_name: "Leo", last_name: "Garcia", major: "Computer Engineering" },
+                        { student_id: 19, first_name: "Zoe", last_name: "Adams", major: "Mathematics" }
+                    ]
+                },
+                {
+                    group_id: 3,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    tagline: "Weekend exam prep for networks.",
+                    description: "Practice exams and timed problem sets every Saturday morning.",
+                    meeting_format: "in_person",
+                    meeting_location: "Engineering Commons",
+                    maximum_capacity: 8,
+                    leader_id: 8,
+                    study_style: "Exam prep",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "saturday", start_time: "11:00:00", end_time: "12:30:00" }
+                    ],
+                    members: [
+                        { student_id: 8, first_name: "Grace", last_name: "Liu", major: "Mathematics" },
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Science" },
+                        { student_id: 6, first_name: "Sofia", last_name: "Ortiz", major: "Mathematics" },
+                        { student_id: 9, first_name: "Avery", last_name: "Morgan", major: "Information Systems" },
+                        { student_id: 20, first_name: "Ryan", last_name: "Patel", major: "Computer Science" },
+                        { student_id: 21, first_name: "Mia", last_name: "Lopez", major: "Computer Science" },
+                        { student_id: 22, first_name: "Chris", last_name: "Wong", major: "Information Systems" }
+                    ]
+                },
+                {
+                    group_id: 4,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    tagline: "Evening review after lecture.",
+                    description: "Go over the week's lecture slides and homework questions together.",
+                    meeting_format: "in_person",
+                    meeting_location: "Love Library 220",
+                    maximum_capacity: 8,
+                    leader_id: 2,
+                    study_style: "Collaborative problem solving",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "19:00:00", end_time: "20:30:00" }
+                    ],
+                    members: [
+                        { student_id: 2, first_name: "Maya", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 3, first_name: "Alex", last_name: "Morgan", major: "Computer Science" },
+                        { student_id: 5, first_name: "Noah", last_name: "Patel", major: "Computer Science" },
+                        { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science" },
+                        { student_id: 16, first_name: "Owen", last_name: "Brooks", major: "Computer Science" },
+                        { student_id: 18, first_name: "Leo", last_name: "Garcia", major: "Computer Engineering" }
+                    ]
+                },
+                {
+                    group_id: 5,
+                    group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
+                    course_name: "Introduction to Artificial Intelligence",
+                    tagline: "Online AI review, one hour a week.",
+                    description: "Review search, logic and probability topics and go over the homework.",
+                    meeting_format: "online",
+                    meeting_location: "Zoom",
+                    maximum_capacity: 6,
+                    leader_id: 1,
+                    study_style: "Collaborative problem solving",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
+                    ],
+                    members: [
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 2, first_name: "Maya", last_name: "Chen", major: "Computer Science" },
+                        { student_id: 16, first_name: "Owen", last_name: "Brooks", major: "Computer Science" },
+                        { student_id: 17, first_name: "Hana", last_name: "Sato", major: "Computer Science" }
+                    ]
+                },
+                {
+                    group_id: 6,
+                    group_name: "CS 370 Study Group",
+                    course_id: 6,
+                    course_code: "CS 370",
+                    course_name: "Computer Architecture",
+                    tagline: "Afternoon project work sessions.",
+                    description: "Bring your project and work on it with others who are stuck on the same parts.",
+                    meeting_format: "in_person",
+                    meeting_location: "Tech Hall 101",
+                    maximum_capacity: 8,
+                    leader_id: 21,
+                    study_style: "Project based",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "monday", start_time: "16:00:00", end_time: "17:30:00" }
+                    ],
+                    members: [
+                        { student_id: 21, first_name: "Mia", last_name: "Lopez", major: "Computer Science" },
+                        { student_id: 6, first_name: "Sofia", last_name: "Ortiz", major: "Mathematics" },
+                        { student_id: 11, first_name: "Micah", last_name: "Kim", major: "Applied Mathematics" },
+                        { student_id: 17, first_name: "Hana", last_name: "Sato", major: "Computer Science" },
+                        { student_id: 19, first_name: "Zoe", last_name: "Adams", major: "Mathematics" }
+                    ]
+                },
+                {
+                    group_id: 7,
+                    group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
+                    course_name: "Introduction to Artificial Intelligence",
+                    tagline: "Quiet online study for AI.",
+                    description: "Work on your own with cameras on, then compare answers at the end.",
+                    meeting_format: "online",
+                    meeting_location: "Discord",
+                    maximum_capacity: 6,
+                    leader_id: 3,
+                    study_style: "Silent study",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "friday", start_time: "15:00:00", end_time: "16:00:00" }
+                    ],
+                    members: [
+                        { student_id: 3, first_name: "Alex", last_name: "Morgan", major: "Computer Science" },
+                        { student_id: 13, first_name: "Lena", last_name: "Park", major: "Computer Science" },
+                        { student_id: 20, first_name: "Ryan", last_name: "Patel", major: "Computer Science" },
+                        { student_id: 22, first_name: "Chris", last_name: "Wong", major: "Information Systems" }
+                    ]
+                },
+                {
+                    group_id: 8,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    tagline: "Sunday exam prep on Zoom.",
+                    description: "Practice questions from old exams, one topic each week.",
+                    meeting_format: "online",
+                    meeting_location: "Zoom",
+                    maximum_capacity: 6,
+                    leader_id: 5,
+                    study_style: "Exam prep",
+                    major_preference: "Any major welcome",
+                    gender_preference: "No gender preference",
+                    meeting_times: [
+                        { day_of_week: "sunday", start_time: "14:00:00", end_time: "15:30:00" }
+                    ],
+                    members: [
+                        { student_id: 5, first_name: "Noah", last_name: "Patel", major: "Computer Science" },
+                        { student_id: 6, first_name: "Sofia", last_name: "Ortiz", major: "Mathematics" },
+                        { student_id: 12, first_name: "Sam", last_name: "Rivera", major: "Information Systems" },
+                        { student_id: 14, first_name: "Noah", last_name: "Singh", major: "Applied Mathematics" },
+                        { student_id: 17, first_name: "Hana", last_name: "Sato", major: "Computer Science" },
+                        { student_id: 19, first_name: "Zoe", last_name: "Adams", major: "Mathematics" }
+                    ]
+                }
             ]
         };
+
+        var groupId = new URLSearchParams(window.location.search).get("id");
+
+        var group = groupData.groups[0];
+        for (var i = 0; i < groupData.groups.length; i++) {
+            if (groupData.groups[i].group_id == groupId) {
+                group = groupData.groups[i];
+            }
+        }
 
         document.getElementById("userInfo").innerHTML = groupData.student.first_name + " " + groupData.student.last_name + " &middot; " + groupData.student.major;
 
         function formatDay(day) {
-            return day.charAt(0).toUpperCase() + day.substring(1);
+            return day.charAt(0).toUpperCase() + day.substring(1, 3);
         }
 
         function formatTime(time) {
@@ -364,10 +558,6 @@
             }
             if (hour == 0) {
                 hour = 12;
-            }
-
-            if (minutes == "00") {
-                return hour + " " + ampm;
             }
             return hour + ":" + minutes + " " + ampm;
         }
@@ -398,17 +588,17 @@
         }
 
         function getLeader() {
-            for (var i = 0; i < groupData.members.length; i++) {
-                if (groupData.members[i].student_id == groupData.group.leader_id) {
-                    return groupData.members[i];
+            for (var i = 0; i < group.members.length; i++) {
+                if (group.members[i].student_id == group.leader_id) {
+                    return group.members[i];
                 }
             }
             return null;
         }
 
         function isMember() {
-            for (var i = 0; i < groupData.members.length; i++) {
-                if (groupData.members[i].student_id == groupData.student.student_id) {
+            for (var i = 0; i < group.members.length; i++) {
+                if (group.members[i].student_id == groupData.student.student_id) {
                     return true;
                 }
             }
@@ -416,8 +606,7 @@
         }
 
         function showGroup() {
-            var group = groupData.group;
-            var members = groupData.members;
+            var members = group.members;
             var spaces = group.maximum_capacity - members.length;
             var leader = getLeader();
 
@@ -432,8 +621,8 @@
             document.getElementById("aboutText").innerHTML = about;
 
             var times = "";
-            for (var i = 0; i < groupData.meeting_times.length; i++) {
-                var t = groupData.meeting_times[i];
+            for (var i = 0; i < group.meeting_times.length; i++) {
+                var t = group.meeting_times[i];
                 if (i > 0) {
                     times += " &middot; ";
                 }
@@ -481,6 +670,10 @@
                 statusBadge.innerText = "Member";
                 spacesBadge.className = "badge green";
                 spacesBadge.innerText = spacesText;
+                if (spaces <= 0) {
+                    spacesBadge.className = "badge red";
+                    spacesBadge.innerText = "Full";
+                }
                 document.getElementById("capacityText").innerText = "You're in this group.";
                 joinBtn.innerText = "Leave Group";
                 joinBtn.className = "join-btn leave-btn";
@@ -506,23 +699,23 @@
             var me = groupData.student;
 
             if (isMember()) {
-                if (me.student_id == groupData.group.leader_id) {
+                if (me.student_id == group.leader_id) {
                     document.getElementById("message").innerText = "You're the leader, you can't leave your own group.";
                     return;
                 }
-                for (var i = 0; i < groupData.members.length; i++) {
-                    if (groupData.members[i].student_id == me.student_id) {
-                        groupData.members.splice(i, 1);
+                for (var i = 0; i < group.members.length; i++) {
+                    if (group.members[i].student_id == me.student_id) {
+                        group.members.splice(i, 1);
                         break;
                     }
                 }
-                // TODO: send leave request to the backend (no leave route yet)
+                // TODO: send the leave to the backend (there's no leave route yet)
                 document.getElementById("message").innerText = "You left the group.";
             } else {
-                if (groupData.group.maximum_capacity - groupData.members.length <= 0) {
+                if (group.maximum_capacity - group.members.length <= 0) {
                     return;
                 }
-                groupData.members.push({
+                group.members.push({
                     student_id: me.student_id,
                     first_name: me.first_name,
                     last_name: me.last_name,

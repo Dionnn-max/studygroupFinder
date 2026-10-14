@@ -390,9 +390,10 @@
     </div>
 
     <script>
-        // TODO: replace with fetch() calls to the backend (/api/auth/me, /api/courses and the students enrollments)
+        // TODO: replace with fetch() calls to the backend (the student, all courses and their enrollments)
         var coursesData = {
             student: {
+                student_id: 1,
                 first_name: "Dion",
                 last_name: "Chen",
                 major: "Computer Science"
@@ -407,9 +408,9 @@
                 { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" }
             ],
             myCourses: [
-                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems", group_count: 4 },
-                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence", group_count: 3 },
-                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture", group_count: 6 }
+                { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems", group_count: 2 },
+                { course_id: 7, course_code: "CS 450", course_name: "Introduction to Artificial Intelligence", group_count: 1 },
+                { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture", group_count: 1 }
             ]
         };
 
@@ -476,7 +477,6 @@
                 }
             }
 
-            // dont let them add the same course twice
             for (var i = 0; i < coursesData.myCourses.length; i++) {
                 if (coursesData.myCourses[i].course_id == picked.course_id) {
                     error.innerText = "You already added " + picked.course_code;

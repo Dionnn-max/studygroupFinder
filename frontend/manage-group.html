@@ -542,8 +542,7 @@
     </div>
 
     <script>
-        var groupId = new URLSearchParams(window.location.search).get("id");
-
+        // TODO: replace with fetch() calls to the backend. There's no GET route for one group yet.
         var manageData = {
             student: {
                 student_id: 1,
@@ -551,31 +550,65 @@
                 last_name: "Chen",
                 major: "Computer Science"
             },
-            group: {
-                group_id: 1,
-                group_name: "CS 576 Study Group",
-                course_id: 16,
-                course_code: "CS 576",
-                course_name: "Computer Networks and Distributed Systems",
-                meeting_location: "Science Library 204",
-                meeting_format: "in_person",
-                maximum_capacity: 8,
-                creator_id: 1,
-                leader_id: 1,
-                created_at: "2026-08-24 10:00:00",
-                is_closed: false // TODO: not in database yet, needs a column to close groups
-            },
-            meeting_times: [
-                { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
-            ],
-            members: [
-                { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science", joined_at: "2026-08-24 10:00:00" },
-                { student_id: 9, first_name: "Avery", last_name: "Morgan", major: "Information Systems", joined_at: "2026-09-03 14:12:00" },
-                { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Science", joined_at: "2026-09-08 09:30:00" },
-                { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science", joined_at: "2026-09-12 18:45:00" },
-                { student_id: 11, first_name: "Micah", last_name: "Kim", major: "Applied Mathematics", joined_at: "2026-09-21 11:05:00" }
+            groups: [
+                {
+                    group_id: 1,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    meeting_format: "in_person",
+                    meeting_location: "Science Library 204",
+                    maximum_capacity: 8,
+                    creator_id: 1,
+                    leader_id: 1,
+                    created_at: "2026-08-24 10:00:00",
+                    is_closed: false, // TODO: not in database yet, needs a column to close groups
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+                    ],
+                    members: [
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science", joined_at: "2026-08-24 10:00:00" },
+                        { student_id: 9, first_name: "Avery", last_name: "Morgan", major: "Information Systems", joined_at: "2026-09-03 14:12:00" },
+                        { student_id: 4, first_name: "Jordan", last_name: "Lee", major: "Computer Science", joined_at: "2026-09-08 09:30:00" },
+                        { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science", joined_at: "2026-09-12 18:45:00" },
+                        { student_id: 11, first_name: "Micah", last_name: "Kim", major: "Applied Mathematics", joined_at: "2026-09-21 11:05:00" }
+                    ]
+                },
+                {
+                    group_id: 5,
+                    group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
+                    course_name: "Introduction to Artificial Intelligence",
+                    meeting_format: "online",
+                    meeting_location: "Zoom",
+                    maximum_capacity: 6,
+                    creator_id: 1,
+                    leader_id: 1,
+                    created_at: "2026-08-25 16:30:00",
+                    is_closed: false,
+                    meeting_times: [
+                        { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
+                    ],
+                    members: [
+                        { student_id: 1, first_name: "Dion", last_name: "Chen", major: "Computer Science", joined_at: "2026-08-25 16:30:00" },
+                        { student_id: 2, first_name: "Maya", last_name: "Chen", major: "Computer Science", joined_at: "2026-09-02 12:00:00" },
+                        { student_id: 16, first_name: "Owen", last_name: "Brooks", major: "Computer Science", joined_at: "2026-09-15 20:10:00" },
+                        { student_id: 17, first_name: "Hana", last_name: "Sato", major: "Computer Science", joined_at: "2026-10-09 10:15:00" }
+                    ]
+                }
             ]
         };
+
+        var groupId = new URLSearchParams(window.location.search).get("id");
+
+        var group = manageData.groups[0];
+        for (var i = 0; i < manageData.groups.length; i++) {
+            if (manageData.groups[i].group_id == groupId) {
+                group = manageData.groups[i];
+            }
+        }
 
         var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var removingId = null;
@@ -596,10 +629,6 @@
             }
             if (hour == 0) {
                 hour = 12;
-            }
-
-            if (minutes == "00") {
-                return hour + " " + ampm;
             }
             return hour + ":" + minutes + " " + ampm;
         }
@@ -629,10 +658,14 @@
             return format;
         }
 
-        // "2026-09-03 14:12:00" -> "Sep 3"
-        function formatDate(dateTime) {
+        // "2026-09-29 15:20:00" -> "Sep 29", or "Sep 29, 2026" with the year
+        function formatDate(dateTime, withYear) {
             var parts = dateTime.split(" ")[0].split("-");
-            return monthNames[parseInt(parts[1]) - 1] + " " + parseInt(parts[2]);
+            var text = monthNames[parseInt(parts[1]) - 1] + " " + parseInt(parts[2]);
+            if (withYear) {
+                text += ", " + parts[0];
+            }
+            return text;
         }
 
         function spacesText(spaces) {
@@ -643,8 +676,7 @@
         }
 
         function showSummary() {
-            var group = manageData.group;
-            var count = manageData.members.length;
+            var count = group.members.length;
             var spaces = group.maximum_capacity - count;
 
             document.getElementById("subtitle").innerText = "Update " + group.group_name + ", manage membership, and keep meeting details accurate.";
@@ -653,8 +685,8 @@
 
             var main = "";
             var sub = "";
-            for (var i = 0; i < manageData.meeting_times.length; i++) {
-                var t = manageData.meeting_times[i];
+            for (var i = 0; i < group.meeting_times.length; i++) {
+                var t = group.meeting_times[i];
                 if (i > 0) {
                     main += ", ";
                 }
@@ -688,20 +720,19 @@
         }
 
         function showMembers() {
-            var group = manageData.group;
             var html = "";
 
-            for (var i = 0; i < manageData.members.length; i++) {
-                var m = manageData.members[i];
+            for (var i = 0; i < group.members.length; i++) {
+                var m = group.members[i];
                 var initials = m.first_name.charAt(0) + m.last_name.charAt(0);
                 var name = m.first_name + " " + m.last_name;
-                var date = "Joined " + formatDate(m.joined_at);
+                var date = "Joined " + formatDate(m.joined_at, false);
                 var action = '<button class="red-btn" onclick="askRemove(' + m.student_id + ')">Remove Member</button>';
                 var leaderBadge = "";
 
                 if (m.student_id == group.leader_id) {
                     leaderBadge = '<span class="badge blue">Group leader</span>';
-                    date = "Created " + formatDate(group.created_at);
+                    date = "Created " + formatDate(group.created_at, false);
                     action = "Owner";
                 } else if (group.is_closed) {
                     action = "";
@@ -745,10 +776,10 @@
 
         function removeMember(studentId) {
             var name = "";
-            for (var i = 0; i < manageData.members.length; i++) {
-                if (manageData.members[i].student_id == studentId) {
-                    name = manageData.members[i].first_name + " " + manageData.members[i].last_name;
-                    manageData.members.splice(i, 1);
+            for (var i = 0; i < group.members.length; i++) {
+                if (group.members[i].student_id == studentId) {
+                    name = group.members[i].first_name + " " + group.members[i].last_name;
+                    group.members.splice(i, 1);
                     break;
                 }
             }
@@ -756,7 +787,7 @@
             // TODO: send to the backend when its connected
 
             var notice = document.getElementById("notice");
-            notice.innerHTML = "<b>&#10003; Member removed</b>" + name + " was removed from " + manageData.group.group_name + ". One space is now available.";
+            notice.innerHTML = "<b>&#10003; Member removed</b>" + name + " was removed from " + group.group_name + ". One space is now available.";
             notice.style.display = "block";
 
             showSummary();
@@ -764,7 +795,7 @@
         }
 
         function showCloseConfirm() {
-            document.getElementById("closeQuestion").innerText = "Are you sure you want to close " + manageData.group.group_name + "?";
+            document.getElementById("closeQuestion").innerText = "Are you sure you want to close " + group.group_name + "?";
             document.getElementById("closeConfirm").style.display = "flex";
         }
 
@@ -773,7 +804,7 @@
         }
 
         function closeGroup() {
-            manageData.group.is_closed = true;
+            group.is_closed = true;
             removingId = null;
             // TODO: send to the backend when its connected
 
@@ -781,21 +812,21 @@
             document.getElementById("closeBtn").style.display = "none";
 
             var notice = document.getElementById("notice");
-            notice.innerHTML = "<b>Group closed</b>" + manageData.group.group_name + " is closed. No one new can join.";
+            notice.innerHTML = "<b>Group closed</b>" + group.group_name + " is closed. No one new can join.";
             notice.style.display = "block";
 
             showSummary();
             showMembers();
         }
 
-        if (manageData.student.student_id != manageData.group.leader_id) {
+        if (manageData.student.student_id != group.leader_id) {
             document.getElementById("leaderView").style.display = "none";
             document.getElementById("editBtn").style.display = "none";
             document.getElementById("notLeader").style.display = "block";
         }
 
         // TODO: create-group.html doesnt load an existing group for editing yet
-        document.getElementById("editBtn").href = "create-group.html?edit=" + manageData.group.group_id;
+        document.getElementById("editBtn").href = "create-group.html?edit=" + group.group_id;
 
         showSummary();
         showMembers();

@@ -307,12 +307,12 @@
         // TODO: replace with fetch() calls to the backend once there are routes for the dashboard
         var dashboardData = {
             student: {
+                student_id: 1,
                 first_name: "Dion",
                 last_name: "Chen",
                 major: "Computer Science"
             },
-            subtitle: "One group meeting and two course deadlines are coming up this week.", // TODO: not in database yet (no deadlines table), add or remove
-            meeting_note: "One upcoming meeting this week", // TODO: not in database yet, could be counted from group_meeting_times
+            course_deadlines: 2, // TODO: not in database yet (no deadlines table), add or remove
             courses: [
                 { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" },
                 { course_id: 6, course_code: "CS 370", course_name: "Computer Architecture" },
@@ -322,48 +322,113 @@
                 {
                     group_id: 1,
                     group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
                     course_name: "Computer Networks and Distributed Systems",
-                    next_meeting: "Wed Oct 7 at 5:30 PM", // TODO: not in database yet, group_meeting_times only has day_of_week and times
+                    meeting_format: "in_person",
                     meeting_location: "Science Library 204",
+                    maximum_capacity: 8,
+                    leader_id: 1,
                     member_count: 5,
-                    maximum_capacity: 8
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
+                    ]
+                },
+                {
+                    group_id: 5,
+                    group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
+                    course_name: "Introduction to Artificial Intelligence",
+                    meeting_format: "online",
+                    meeting_location: "Zoom",
+                    maximum_capacity: 6,
+                    leader_id: 1,
+                    member_count: 4,
+                    meeting_times: [
+                        { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
+                    ]
+                },
+                {
+                    group_id: 2,
+                    group_name: "CS 370 Study Group",
+                    course_id: 6,
+                    course_code: "CS 370",
+                    course_name: "Computer Architecture",
+                    meeting_format: "hybrid",
+                    meeting_location: "Tech Hall + Discord",
+                    maximum_capacity: 8,
+                    leader_id: 7,
+                    member_count: 6,
+                    meeting_times: [
+                        { day_of_week: "tuesday", start_time: "18:00:00", end_time: "20:00:00" }
+                    ]
+                },
+                {
+                    group_id: 3,
+                    group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
+                    course_name: "Computer Networks and Distributed Systems",
+                    meeting_format: "in_person",
+                    meeting_location: "Engineering Commons",
+                    maximum_capacity: 8,
+                    leader_id: 8,
+                    member_count: 8,
+                    meeting_times: [
+                        { day_of_week: "saturday", start_time: "11:00:00", end_time: "12:30:00" }
+                    ]
                 }
             ],
             // TODO: join requests are not in Phase 1 (open-join only), probably remove this and the Pending cards
             pendingRequests: [
                 {
-                    group_id: 2,
+                    group_id: 6,
                     group_name: "CS 370 Study Group",
+                    course_id: 6,
                     course_code: "CS 370",
                     course_name: "Computer Architecture",
-                    requested_date: "Sep 26"
+                    requested_at: "2026-09-26 14:10:00"
                 }
             ],
             suggestedGroups: [
                 {
                     group_id: 4,
                     group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
                     course_name: "Computer Networks and Distributed Systems",
-                    day_of_week: "wednesday",
-                    start_time: "19:00:00",
                     meeting_format: "in_person",
-                    member_count: 6,
+                    meeting_location: "Love Library 220",
                     maximum_capacity: 8,
-                    match_percent: 92 // TODO: not in database yet, add or remove
+                    leader_id: 2,
+                    member_count: 6,
+                    match_percent: 92, // TODO: not in database yet, add or remove
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "19:00:00", end_time: "20:30:00" }
+                    ]
                 },
                 {
-                    group_id: 5,
+                    group_id: 7,
                     group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
                     course_name: "Introduction to Artificial Intelligence",
-                    day_of_week: "thursday",
-                    start_time: "19:00:00",
                     meeting_format: "online",
-                    member_count: 4,
+                    meeting_location: "Discord",
                     maximum_capacity: 6,
-                    approval_required: true // TODO: not in Phase 1 (open-join only)
+                    leader_id: 3,
+                    member_count: 4,
+                    approval_required: true, // TODO: not in Phase 1 (open-join only)
+                    meeting_times: [
+                        { day_of_week: "friday", start_time: "15:00:00", end_time: "16:00:00" }
+                    ]
                 }
             ]
         };
+
+        var dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function formatDay(day) {
             return day.charAt(0).toUpperCase() + day.substring(1, 3);
@@ -384,10 +449,6 @@
             if (hour == 0) {
                 hour = 12;
             }
-
-            if (minutes == "00") {
-                return hour + " " + ampm;
-            }
             return hour + ":" + minutes + " " + ampm;
         }
 
@@ -402,15 +463,51 @@
             return format;
         }
 
+        // "2026-09-29 15:20:00" -> "Sep 29", or "Sep 29, 2026" with the year
+        function formatDate(dateTime, withYear) {
+            var parts = dateTime.split(" ")[0].split("-");
+            var text = monthNames[parseInt(parts[1]) - 1] + " " + parseInt(parts[2]);
+            if (withYear) {
+                text += ", " + parts[0];
+            }
+            return text;
+        }
+
+        // works out the date of the next time this meeting happens
+        function nextDate(meeting) {
+            var now = new Date();
+            var target = dayNames.indexOf(meeting.day_of_week);
+            var parts = meeting.start_time.split(":");
+
+            var date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+            var daysAway = (target - now.getDay() + 7) % 7;
+            date.setDate(date.getDate() + daysAway);
+
+            if (date < now) {
+                date.setDate(date.getDate() + 7);
+            }
+            return date;
+        }
+
         var student = dashboardData.student;
         var courses = dashboardData.courses;
         var myGroups = dashboardData.myGroups;
         var requests = dashboardData.pendingRequests;
         var suggested = dashboardData.suggestedGroups;
 
+        var meetingCount = 0;
+        for (var i = 0; i < myGroups.length; i++) {
+            meetingCount += myGroups[i].meeting_times.length;
+        }
+
+        var meetingText = meetingCount + " group meetings";
+        if (meetingCount == 1) {
+            meetingText = "1 group meeting";
+        }
+
         document.getElementById("userInfo").innerHTML = student.first_name + " " + student.last_name + " &middot; " + student.major;
         document.getElementById("welcome").innerText = "Welcome back, " + student.first_name;
-        document.getElementById("subtitle").innerText = dashboardData.subtitle;
+        document.getElementById("subtitle").innerText = meetingText + " and " + dashboardData.course_deadlines + " course deadlines are coming up this week.";
 
         var codes = "";
         var names = "";
@@ -435,7 +532,10 @@
         } else {
             document.getElementById("groupCount").innerText = myGroups.length + " Study groups";
         }
-        document.getElementById("meetingNote").innerText = dashboardData.meeting_note;
+        document.getElementById("meetingNote").innerText = meetingCount + " upcoming meetings this week";
+        if (meetingCount == 1) {
+            document.getElementById("meetingNote").innerText = "One upcoming meeting this week";
+        }
 
         var requestNames = "";
         for (var i = 0; i < requests.length; i++) {
@@ -454,8 +554,12 @@
         var html = "";
         for (var i = 0; i < myGroups.length; i++) {
             var group = myGroups[i];
+            var meeting = group.meeting_times[0];
+            var date = nextDate(meeting);
+            var when = formatDay(meeting.day_of_week) + " " + monthNames[date.getMonth()] + " " + date.getDate() + " at " + formatTime(meeting.start_time);
+
             html +=
-                '<p>' + group.group_name + ' &middot; ' + group.course_name + ' &middot; ' + group.next_meeting +
+                '<p>' + group.group_name + ' &middot; ' + group.course_name + ' &middot; ' + when +
                 ' &middot; ' + group.meeting_location + ' &middot; ' + group.member_count + '/' + group.maximum_capacity + '</p>' +
                 '<a href="group-details.html?id=' + group.group_id + '" class="btn">View Group</a>';
         }
@@ -474,13 +578,14 @@
 
         html = "";
         for (var i = 0; i < requests.length; i++) {
-            html += '<p>' + requests[i].group_name + ' &middot; ' + requests[i].course_name + ' &middot; Requested ' + requests[i].requested_date + '</p>';
+            html += '<p>' + requests[i].group_name + ' &middot; ' + requests[i].course_name + ' &middot; Requested ' + formatDate(requests[i].requested_at, false) + '</p>';
         }
         document.getElementById("requestList").innerHTML = html;
 
         html = "";
         for (var i = 0; i < suggested.length; i++) {
             var group = suggested[i];
+            var meeting = group.meeting_times[0];
             var badgeHtml = '<span class="badge blue">' + group.match_percent + '% match</span>';
             if (group.approval_required) {
                 badgeHtml = '<span class="badge yellow">Approval Required</span>';
@@ -492,7 +597,7 @@
                         '<h3>' + group.group_name + '</h3>' +
                         badgeHtml +
                     '</div>' +
-                    '<p>' + group.course_name + ' &middot; ' + formatDay(group.day_of_week) + ' ' + formatTime(group.start_time) +
+                    '<p>' + group.course_name + ' &middot; ' + formatDay(meeting.day_of_week) + ' ' + formatTime(meeting.start_time) +
                     ' &middot; ' + formatMeeting(group.meeting_format) + ' &middot; ' + group.member_count + '/' + group.maximum_capacity + '</p>' +
                     '<a href="group-details.html?id=' + group.group_id + '" class="btn">View Details</a>' +
                 '</div>';

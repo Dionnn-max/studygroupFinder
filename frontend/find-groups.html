@@ -378,23 +378,16 @@
                     <label for="format">Meeting format</label>
                     <select id="format">
                         <option value="">Any</option>
-                        <option>In person</option>
-                        <option>Online</option>
-                        <option>Hybrid</option>
                     </select>
 
                     <label for="availability">Availability</label>
                     <select id="availability">
                         <option value="">Any</option>
-                        <option>Weekdays</option>
-                        <option>Weekends</option>
                     </select>
 
                     <label for="location">Location</label>
                     <select id="location">
                         <option value="">Campus or online</option>
-                        <option>Campus</option>
-                        <option>Online</option>
                     </select>
 
                     <button class="blue-btn" onclick="searchGroups()">Apply Filters</button>
@@ -413,70 +406,90 @@
     </div>
 
     <script>
-        // TODO: replace with fetch() calls to the backend (/api/auth/me and /api/groups)
+        // TODO: replace with fetch() calls to the backend. The backend should only send groups the student isn't in yet.
         var groupsData = {
             student: {
+                student_id: 1,
                 first_name: "Dion",
                 last_name: "Chen",
                 major: "Computer Science"
             },
             majors: ["Computer Science", "Computer Engineering", "Mathematics"], // TODO: groups dont have a major in the database, decide what this filter means
+            formats: ["in_person", "online", "hybrid"],
+            availability: ["Weekdays", "Weekends"],
+            locations: ["Campus", "Online"],
             groups: [
                 {
-                    group_id: 1,
+                    group_id: 4,
                     group_name: "CS 576 Study Group",
                     course_id: 16,
                     course_code: "CS 576",
                     course_name: "Computer Networks and Distributed Systems",
-                    day_of_week: "wednesday",
-                    start_time: "17:30:00",
-                    end_time: "19:00:00",
-                    meeting_location: "Science Library 204",
                     meeting_format: "in_person",
-                    study_style: "Collaborative", // TODO: not in database yet, add a column or remove
-                    member_count: 5,
-                    maximum_capacity: 8
+                    meeting_location: "Love Library 220",
+                    maximum_capacity: 8,
+                    leader_id: 2,
+                    member_count: 6,
+                    study_style: "Collaborative problem solving", // TODO: not in database yet, add a column or remove
+                    meeting_times: [
+                        { day_of_week: "wednesday", start_time: "19:00:00", end_time: "20:30:00" }
+                    ]
                 },
                 {
-                    group_id: 2,
+                    group_id: 6,
                     group_name: "CS 370 Study Group",
                     course_id: 6,
                     course_code: "CS 370",
                     course_name: "Computer Architecture",
-                    day_of_week: "tuesday",
-                    start_time: "18:00:00",
-                    end_time: "20:00:00",
-                    meeting_location: "Tech Hall + Discord",
-                    meeting_format: "hybrid",
-                    study_style: "Project based",
-                    member_count: 6,
+                    meeting_format: "in_person",
+                    meeting_location: "Tech Hall 101",
                     maximum_capacity: 8,
-                    invite_only: true // TODO: not in Phase 1 (open-join only), Full and Open are calculated from member_count
+                    leader_id: 21,
+                    member_count: 5,
+                    study_style: "Project based",
+                    meeting_times: [
+                        { day_of_week: "monday", start_time: "16:00:00", end_time: "17:30:00" }
+                    ]
                 },
                 {
-                    group_id: 3,
+                    group_id: 7,
+                    group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
+                    course_name: "Introduction to Artificial Intelligence",
+                    meeting_format: "online",
+                    meeting_location: "Discord",
+                    maximum_capacity: 6,
+                    leader_id: 3,
+                    member_count: 4,
+                    study_style: "Silent study",
+                    approval_required: true, // TODO: not in Phase 1 (open-join only)
+                    meeting_times: [
+                        { day_of_week: "friday", start_time: "15:00:00", end_time: "16:00:00" }
+                    ]
+                },
+                {
+                    group_id: 8,
                     group_name: "CS 576 Study Group",
                     course_id: 16,
                     course_code: "CS 576",
                     course_name: "Computer Networks and Distributed Systems",
-                    day_of_week: "saturday",
-                    start_time: "11:00:00",
-                    end_time: "12:30:00",
-                    meeting_location: "Engineering Commons",
-                    meeting_format: "in_person",
+                    meeting_format: "online",
+                    meeting_location: "Zoom",
+                    maximum_capacity: 6,
+                    leader_id: 5,
+                    member_count: 6,
                     study_style: "Exam prep",
-                    member_count: 8,
-                    maximum_capacity: 8
+                    meeting_times: [
+                        { day_of_week: "sunday", start_time: "14:00:00", end_time: "15:30:00" }
+                    ]
                 }
             ]
         };
 
-        document.getElementById("userInfo").innerHTML = groupsData.student.first_name + " " + groupsData.student.last_name + " &middot; " + groupsData.student.major;
+        var courseFilter = new URLSearchParams(window.location.search).get("course_id");
 
-        var majorSelect = document.getElementById("major");
-        for (var i = 0; i < groupsData.majors.length; i++) {
-            majorSelect.innerHTML += "<option>" + groupsData.majors[i] + "</option>";
-        }
+        document.getElementById("userInfo").innerHTML = groupsData.student.first_name + " " + groupsData.student.last_name + " &middot; " + groupsData.student.major;
 
         function formatDay(day) {
             return day.charAt(0).toUpperCase() + day.substring(1, 3);
@@ -497,10 +510,6 @@
             if (hour == 0) {
                 hour = 12;
             }
-
-            if (minutes == "00") {
-                return hour + " " + ampm;
-            }
             return hour + ":" + minutes + " " + ampm;
         }
 
@@ -515,7 +524,7 @@
             if (minutes % 60 == 0) {
                 return (minutes / 60) + " hours";
             }
-            return minutes + " min";
+            return minutes + " minutes";
         }
 
         function formatMeeting(format) {
@@ -529,6 +538,28 @@
             return format;
         }
 
+        function fillFilters() {
+            var majorSelect = document.getElementById("major");
+            for (var i = 0; i < groupsData.majors.length; i++) {
+                majorSelect.innerHTML += "<option>" + groupsData.majors[i] + "</option>";
+            }
+
+            var formatSelect = document.getElementById("format");
+            for (var i = 0; i < groupsData.formats.length; i++) {
+                formatSelect.innerHTML += '<option value="' + groupsData.formats[i] + '">' + formatMeeting(groupsData.formats[i]) + "</option>";
+            }
+
+            var availabilitySelect = document.getElementById("availability");
+            for (var i = 0; i < groupsData.availability.length; i++) {
+                availabilitySelect.innerHTML += "<option>" + groupsData.availability[i] + "</option>";
+            }
+
+            var locationSelect = document.getElementById("location");
+            for (var i = 0; i < groupsData.locations.length; i++) {
+                locationSelect.innerHTML += "<option>" + groupsData.locations[i] + "</option>";
+            }
+        }
+
         function showGroups() {
             var list = document.getElementById("groupList");
             var html = "";
@@ -536,13 +567,12 @@
             for (var i = 0; i < groupsData.groups.length; i++) {
                 var group = groupsData.groups[i];
                 var spaces = group.maximum_capacity - group.member_count;
-                var format = formatMeeting(group.meeting_format);
                 var badge = "";
                 var button = "";
 
-                if (group.invite_only) {
-                    badge = '<span class="badge purple">Invite Only</span>';
-                    button = "Invite Only";
+                if (group.approval_required) {
+                    badge = '<span class="badge purple">Approval Required</span>';
+                    button = "Approval Required";
                 } else if (spaces <= 0) {
                     badge = '<span class="badge red">Full</span>';
                     button = "Group Full";
@@ -551,15 +581,23 @@
                     button = "Request to Join"; // TODO: Phase 1 joins right away, maybe change to Join Group
                 }
 
+                var times = "";
+                for (var j = 0; j < group.meeting_times.length; j++) {
+                    var t = group.meeting_times[j];
+                    if (j > 0) {
+                        times += " &middot; ";
+                    }
+                    times += formatDay(t.day_of_week) + " " + formatTime(t.start_time) + " &middot; " + formatDuration(t.start_time, t.end_time);
+                }
+
                 var info = group.course_name +
-                    " &middot; " + formatDay(group.day_of_week) + " " + formatTime(group.start_time) +
-                    " &middot; " + formatDuration(group.start_time, group.end_time) +
+                    " &middot; " + times +
                     " &middot; " + group.meeting_location +
-                    " &middot; " + format +
+                    " &middot; " + formatMeeting(group.meeting_format) +
                     " &middot; " + group.study_style +
                     " &middot; " + group.member_count + "/" + group.maximum_capacity;
 
-                if (!group.invite_only && spaces > 0) {
+                if (!group.approval_required && spaces > 0) {
                     if (spaces == 1) {
                         info += " &middot; 1 space";
                     } else {
@@ -573,7 +611,7 @@
                 }
 
                 html +=
-                    '<div class="' + cardClass + '" data-format="' + format + '">' +
+                    '<div class="' + cardClass + '" data-format="' + group.meeting_format + '" data-course="' + group.course_id + '">' +
                         '<div class="card-top">' +
                             '<h3>' + group.group_name + '</h3>' +
                             badge +
@@ -584,12 +622,6 @@
             }
 
             list.innerHTML = html;
-
-            if (groupsData.groups.length == 1) {
-                document.getElementById("resultCount").innerHTML = "Search Results &middot; 1 group";
-            } else {
-                document.getElementById("resultCount").innerHTML = "Search Results &middot; " + groupsData.groups.length + " groups";
-            }
         }
 
         function searchGroups() {
@@ -606,6 +638,9 @@
                     show = false;
                 }
                 if (format != "" && cards[i].getAttribute("data-format") != format) {
+                    show = false;
+                }
+                if (courseFilter != null && cards[i].getAttribute("data-course") != courseFilter) {
                     show = false;
                 }
 
@@ -633,6 +668,7 @@
         }
 
         function clearFilters() {
+            courseFilter = null;
             document.getElementById("major").value = "";
             document.getElementById("format").value = "";
             document.getElementById("availability").value = "";
@@ -646,7 +682,9 @@
             }
         });
 
+        fillFilters();
         showGroups();
+        searchGroups();
     </script>
 </body>
 </html>

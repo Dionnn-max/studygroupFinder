@@ -685,17 +685,17 @@
             },
             // TODO: none of these study preferences are in the database yet, add a table or remove
             preferences: {
-                gender_preference: "No preference",
+                gender_preference: "No gender preference",
                 availability: ["tuesday", "wednesday", "thursday", "saturday"],
                 typical_start: "After 5:30 PM",
                 session_length: "60-90 minutes",
                 meeting_format: "hybrid",
                 study_habits: "Collaborative problem solving, weekly review, and practice exams. I like to compare approaches after focused work."
             },
-            course_count: 3,
-            group_count: 4,
+            course_ids: [16, 7, 6],
+            group_ids: [1, 5, 2, 3],
             majors: ["Computer Science", "Computer Engineering", "Mathematics", "Biology", "Business", "Psychology", "Other"], // TODO: there is no majors table, same list as register.html
-            gender_preferences: ["No preference", "Female only", "Male only"],
+            gender_preferences: ["No gender preference", "Female only", "Male only"],
             start_options: ["Before 12 PM", "12 PM - 5:30 PM", "After 5:30 PM", "Flexible"],
             length_options: ["Under 60 minutes", "60-90 minutes", "90-120 minutes", "2+ hours"],
             days: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
@@ -770,8 +770,8 @@
             document.getElementById("initials").innerText = s.first_name.charAt(0) + s.last_name.charAt(0);
             document.getElementById("sideName").innerText = s.first_name + " " + s.last_name;
             document.getElementById("sideMajor").innerText = s.major;
-            document.getElementById("courseCount").innerText = profileData.course_count + " active";
-            document.getElementById("groupCount").innerText = profileData.group_count + " total";
+            document.getElementById("courseCount").innerText = profileData.course_ids.length + " active";
+            document.getElementById("groupCount").innerText = profileData.group_ids.length + " total";
             document.getElementById("memberSince").innerText = monthNames[parseInt(parts[1]) - 1] + " " + parts[0];
 
             var badge = document.getElementById("completeBadge");
@@ -849,7 +849,6 @@
             p.study_habits = document.getElementById("studyHabits").value.trim();
 
             // TODO: send to the backend when its connected
-            console.log(profileData.student, profileData.preferences);
             showSummary();
             showMessage("Changes saved on this page. Saving isn't connected to the backend yet.", "success");
         }

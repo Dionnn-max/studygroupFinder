@@ -622,7 +622,7 @@
                 { course_id: 16, course_code: "CS 576", course_name: "Computer Networks and Distributed Systems" }
             ],
             major_preferences: ["Any major welcome", "Computer Science", "Computer Engineering", "Mathematics"], // TODO: not in database yet
-            gender_preferences: ["No preference", "Female only", "Male only"], // TODO: not in database yet
+            gender_preferences: ["No gender preference", "Female only", "Male only"], // TODO: not in database yet
             study_habits: ["Collaborative problem solving", "Silent study", "Exam prep", "Project based"], // TODO: not in database yet
             days: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
             min_capacity: 2,
@@ -836,8 +836,7 @@
                 meeting_times: meetingTimes
             };
 
-            // TODO: send group to the backend when its connected
-            console.log(group);
+            // TODO: send group to the backend (POST /api/groups) when its connected
             showMessage(group.group_name + " is ready. Saving isn't connected to the backend yet.", "success");
         }
 

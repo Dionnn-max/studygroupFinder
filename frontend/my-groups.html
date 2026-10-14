@@ -293,6 +293,7 @@
     </div>
 
     <script>
+        // TODO: replace with fetch() calls to the backend. There's no route for the student's groups yet.
         var myGroupsData = {
             student: {
                 student_id: 1,
@@ -327,7 +328,6 @@
                     member_count: 4,
                     maximum_capacity: 6,
                     leader_id: 1,
-                    approval_required: true, // TODO: not in Phase 1 (open-join only)
                     meeting_times: [
                         { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
                     ]
@@ -388,10 +388,6 @@
             }
             if (hour == 0) {
                 hour = 12;
-            }
-
-            if (minutes == "00") {
-                return hour + " " + ampm;
             }
             return hour + ":" + minutes + " " + ampm;
         }
@@ -481,9 +477,7 @@
 
                 if (group.leader_id == me) {
                     var badge = '<span class="badge green">Open</span>';
-                    if (group.approval_required) {
-                        badge = '<span class="badge yellow">Approval Required</span>';
-                    } else if (spaces <= 0) {
+                    if (spaces <= 0) {
                         badge = '<span class="badge red">Full</span>';
                     }
 

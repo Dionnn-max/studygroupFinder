@@ -287,12 +287,9 @@
 
         form.addEventListener("submit", function(e) {
             e.preventDefault();
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
 
-            // TODO: send email + password to the backend when its ready
-            console.log("login clicked: " + email);
-            document.getElementById("message").innerText = "Login isn't connected to the backend yet.";
+            // TODO: check the email and password with the backend (POST /api/auth/login) first
+            window.location.href = "dashboard.html";
         });
     </script>
 </body>

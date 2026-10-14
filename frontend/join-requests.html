@@ -427,7 +427,7 @@
     </div>
 
     <script>
-        // TODO: join requests are Phase 2 (Phase 1 is open-join only), and there is no join_requests table in the database yet
+        // TODO: join requests are Phase 2. There is no join_requests table in the database yet.
         var requestsData = {
             student: {
                 student_id: 1,
@@ -439,11 +439,14 @@
                 {
                     group_id: 1,
                     group_name: "CS 576 Study Group",
+                    course_id: 16,
+                    course_code: "CS 576",
                     course_name: "Computer Networks and Distributed Systems",
+                    meeting_format: "in_person",
                     meeting_location: "Science Library 204",
-                    member_count: 5,
                     maximum_capacity: 8,
                     leader_id: 1,
+                    member_count: 5,
                     meeting_times: [
                         { day_of_week: "wednesday", start_time: "17:30:00", end_time: "19:00:00" }
                     ]
@@ -451,11 +454,14 @@
                 {
                     group_id: 5,
                     group_name: "CS 450 Study Group",
+                    course_id: 7,
+                    course_code: "CS 450",
                     course_name: "Introduction to Artificial Intelligence",
+                    meeting_format: "online",
                     meeting_location: "Zoom",
-                    member_count: 4,
                     maximum_capacity: 6,
                     leader_id: 1,
+                    member_count: 4,
                     meeting_times: [
                         { day_of_week: "thursday", start_time: "19:00:00", end_time: "20:00:00" }
                     ]
@@ -488,11 +494,11 @@
                 },
                 {
                     request_id: 4,
-                    group_id: 1,
+                    group_id: 5,
                     status: "approved",
                     requested_at: "2026-10-07 13:00:00",
                     decided_at: "2026-10-09 10:15:00",
-                    student: { student_id: 10, first_name: "Priya", last_name: "Rao", major: "Data Science", course_codes: ["CS 576"], study_habits: "Weekly review" }
+                    student: { student_id: 17, first_name: "Hana", last_name: "Sato", major: "Computer Science", course_codes: ["CS 450", "CS 370"], study_habits: "Weekly review" }
                 },
                 {
                     request_id: 5,
@@ -536,11 +542,6 @@
                 text += ", " + parts[0];
             }
             return text;
-        }
-
-        function toDate(dateTime) {
-            var parts = dateTime.split(" ")[0].split("-");
-            return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
         }
 
         // "2026-10-13 19:03:00" for right now, same format as the database
@@ -662,13 +663,12 @@
         }
 
         function showDecisions() {
-            var weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
             var html = "";
 
+            // TODO: the backend should only send decisions from the last 7 days
             for (var i = requestsData.requests.length - 1; i >= 0; i--) {
                 var r = requestsData.requests[i];
-                if (r.status == "pending" || toDate(r.decided_at) < weekAgo) {
+                if (r.status == "pending") {
                     continue;
                 }
                 var group = getGroup(r.group_id);
