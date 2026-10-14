@@ -8,11 +8,13 @@ VALUES
     ('CS 240', 'Computer Organization'),
     ('CS 250', 'Introduction to Software Systems'),
     ('CS 370', 'Computer Architecture'),
+    ('CS 420', 'Advanced Programming Languages'),
     ('CS 450', 'Introduction to Artificial Intelligence'),
     ('CS 460', 'Algorithms'),
     ('CS 480', 'Operating Systems'),
     ('CS 503', 'Scientific Database Techniques'),
     ('CS 514', 'Database Theory and Implementation'),
+    ('CS 576', 'Computer Networks and Distributed Systems'),
     ('MATH 150', 'Calculus I'),
     ('MATH 151', 'Calculus II'),
     ('MATH 245', 'Discrete Mathematics');
