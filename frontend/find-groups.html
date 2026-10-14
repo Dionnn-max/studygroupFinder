@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Finder - Find Groups</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #13295b;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar */
+        .sidebar {
+            width: 248px;
+            flex-shrink: 0;
+            background-color: #13295b;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 6px;
+        }
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+            background-color: #4fd6b8;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c5cee3;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3670;
+        }
+
+        .sidebar a.active {
+            background-color: #25407c;
+            color: #4fd6b8;
+        }
+
+        .user-info {
+            margin-top: auto;
+            border-top: 1px solid #2c4580;
+            padding-top: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-info a {
+            padding: 8px 0;
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .user-info a:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* main part */
+        .main {
+            flex: 1;
+            background-color: #f5f8fd;
+            padding: 36px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7386;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .search-label {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .search-row input {
+            flex: 1;
+            height: 46px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            padding-left: 14px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .blue-btn {
+            height: 46px;
+            padding: 0 18px;
+            background-color: #2452a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .blue-btn:hover {
+            background-color: #1c4390;
+        }
+
+        .content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .filters {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .filters-top h3 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .filters-top a {
+            font-size: 12px;
+            color: #2452a6;
+            text-decoration: none;
+        }
+
+        .filters label {
+            display: block;
+            font-size: 12px;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        .filters select {
+            width: 100%;
+            height: 36px;
+            border: 1px solid #cfd6e4;
+            border-radius: 6px;
+            padding-left: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            color: #13295b;
+            background-color: white;
+        }
+
+        .filters .blue-btn {
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .results {
+            flex: 1;
+        }
+
+        .results h2 {
+            font-size: 20px;
+            margin-top: 2px;
+            margin-bottom: 12px;
+        }
+
+        .group-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .group-card {
+            width: calc(50% - 7px);
+            background-color: white;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .group-card.wide {
+            width: 100%;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-card h3 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .group-card p {
+            font-size: 12px;
+            color: #6b7386;
+            line-height: 1.6;
+            margin-top: 10px;
+            margin-bottom: 12px;
+        }
+
+        .details-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 1px solid #cfd6e4;
+            border-radius: 8px;
+            color: #2452a6;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .details-btn:hover {
+            border-color: #2452a6;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .green {
+            background-color: #dff5ec;
+            color: #1f8a5f;
+        }
+
+        .purple {
+            background-color: #ebe4fb;
+            color: #6a48c9;
+        }
+
+        .red {
+            background-color: #fde6e6;
+            color: #c0392b;
+        }
+
+        #noResults {
+            font-size: 13px;
+            color: #6b7386;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                display: block;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .main {
+                padding: 24px 16px;
+            }
+            .content {
+                display: block;
+            }
+            .filters {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .group-card {
+                width: 100%;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#13295b" stroke-width="2">
+                        <path d="M12 6.5C10.5 5.2 8.3 4.5 4 4.5v13c4.3 0 6.5.7 8 2 1.5-1.3 3.7-2 8-2v-13c-4.3 0-6.5.7-8 2z"/>
+                        <path d="M12 6.5v13"/>
+                    </svg>
+                </div>
+                Study Group Finder
+            </div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-courses.html">My Courses</a>
+            <a href="find-groups.html" class="active">Find Groups</a>
+            <a href="create-group.html">Create Group</a>
+            <a href="my-groups.html">My Groups</a>
+            <a href="join-requests.html">Join Requests</a>
+            <a href="profile.html">Profile Settings</a>
+
+            <div class="user-info">
+                Dion Chen &middot; Computer Science
+                <a href="login.html">&#8599; Log Out</a>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1>Find Study Groups</h1>
+            <p class="subtitle">Search by course and narrow results to groups that fit your study style.</p>
+
+            <label class="search-label" for="searchBox">Search by course name or number</label>
+            <div class="search-row">
+                <input type="text" id="searchBox" placeholder="Search SDSU course number or title">
+                <button class="blue-btn" onclick="searchGroups()">Search Groups</button>
+            </div>
+
+            <div class="content">
+                <div class="filters">
+                    <div class="filters-top">
+                        <h3>Filters</h3>
+                        <a href="#" onclick="clearFilters()">Clear Filters</a>
+                    </div>
+
+                    <label for="major">Major</label>
+                    <select id="major">
+                        <option value="">Any</option>
+                        <option>Computer Science</option>
+                        <option>Computer Engineering</option>
+                        <option>Mathematics</option>
+                    </select>
+
+                    <label for="format">Meeting format</label>
+                    <select id="format">
+                        <option value="">Any</option>
+                        <option>In person</option>
+                        <option>Online</option>
+                        <option>Hybrid</option>
+                    </select>
+
+                    <label for="availability">Availability</label>
+                    <select id="availability">
+                        <option value="">Any</option>
+                        <option>Weekdays</option>
+                        <option>Weekends</option>
+                    </select>
+
+                    <label for="location">Location</label>
+                    <select id="location">
+                        <option value="">Campus or online</option>
+                        <option>Campus</option>
+                        <option>Online</option>
+                    </select>
+
+                    <button class="blue-btn" onclick="searchGroups()">Apply Filters</button>
+                </div>
+
+                <div class="results">
+                    <h2 id="resultCount">Search Results &middot; 3 groups</h2>
+
+                    <!-- hardcoded groups for now, these should come from the Study Groups table -->
+                    <div class="group-list">
+                        <div class="group-card wide" data-format="In person">
+                            <div class="card-top">
+                                <h3>CS 576 Study Group</h3>
+                                <span class="badge green">Open</span>
+                            </div>
+                            <p>Computer Networks and Distributed Systems &middot; Wed 5:30 PM &middot; 90 min &middot; Science Library 204 &middot; In person &middot; Collaborative &middot; 5/8 &middot; 3 spaces</p>
+                            <a href="group-details.html" class="details-btn">View Details &middot; Request to Join</a>
+                        </div>
+
+                        <div class="group-card" data-format="Hybrid">
+                            <div class="card-top">
+                                <h3>CS 370 Study Group</h3>
+                                <span class="badge purple">Invite Only</span>
+                            </div>
+                            <p>Computer Architecture &middot; Tue 6 PM &middot; 2 hours &middot; Tech Hall + Discord &middot; Hybrid &middot; Project based &middot; 6/8</p>
+                            <a href="group-details.html" class="details-btn">View Details &middot; Invite Only</a>
+                        </div>
+
+                        <div class="group-card" data-format="In person">
+                            <div class="card-top">
+                                <h3>CS 576 Study Group</h3>
+                                <span class="badge red">Full</span>
+                            </div>
+                            <p>Computer Networks and Distributed Systems &middot; Sat 11 AM &middot; 90 min &middot; Engineering Commons &middot; In person &middot; Exam prep &middot; 8/8</p>
+                            <a href="group-details.html" class="details-btn">View Details &middot; Group Full</a>
+                        </div>
+                    </div>
+
+                    <p id="noResults">No groups found. Try a different course.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function searchGroups() {
+            var text = document.getElementById("searchBox").value.toLowerCase();
+            var format = document.getElementById("format").value;
+            var cards = document.getElementsByClassName("group-card");
+            var count = 0;
+
+            for (var i = 0; i < cards.length; i++) {
+                var cardText = cards[i].innerText.toLowerCase();
+                var show = true;
+
+                if (text != "" && cardText.indexOf(text) == -1) {
+                    show = false;
+                }
+                if (format != "" && cards[i].getAttribute("data-format") != format) {
+                    show = false;
+                }
+
+                if (show) {
+                    cards[i].style.display = "block";
+                    count++;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            if (count == 1) {
+                document.getElementById("resultCount").innerHTML = "Search Results &middot; 1 group";
+            } else {
+                document.getElementById("resultCount").innerHTML = "Search Results &middot; " + count + " groups";
+            }
+
+            if (count == 0) {
+                document.getElementById("noResults").style.display = "block";
+            } else {
+                document.getElementById("noResults").style.display = "none";
+            }
+
+            // TODO: major, availability and location filters need the backend
+        }
+
+        function clearFilters() {
+            document.getElementById("major").value = "";
+            document.getElementById("format").value = "";
+            document.getElementById("availability").value = "";
+            document.getElementById("location").value = "";
+            searchGroups();
+        }
+
+        document.getElementById("searchBox").addEventListener("keydown", function(e) {
+            if (e.key == "Enter") {
+                searchGroups();
+            }
+        });
+    </script>
+</body>
+</html>
