@@ -9,7 +9,11 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from backend.db import get_db_connection
+# Changed on 10/18/2023: Use the backend package for imports when running the app as a module.
+try:
+    from backend.db import get_db_connection
+except ModuleNotFoundError:  # pragma: no cover - allows running app.py directly
+    from db import get_db_connection
 
 
 load_dotenv(Path(__file__).with_name(".env"))
