@@ -293,7 +293,8 @@
                             <label for="age">Age</label>
                             <span class="optional">Optional</span>
                         </div>
-                        <input type="number" id="age" name="age" min="16" max="99">
+                        <label for="dateOfBirth">Date of birth</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
                     </div>
 
                     <div class="agree">
@@ -331,15 +332,15 @@
         var form = document.getElementById("registerForm");
         var message = document.getElementById("message");
 
-        form.addEventListener("submit", function(e) {
+        form.addEventListener("submit", async function(e) {
             e.preventDefault();
 
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
 
-            if (!email.endsWith(".edu")) {
-                message.innerText = "Please use your student email (.edu)";
+            if (!email.endsWith("@sdsu.edu")) {
+                message.innerText = "Please use your @sdsu.edu email";
                 return;
             }
 
@@ -353,8 +354,32 @@
                 return;
             }
 
-            // TODO: send this to the backend (POST /api/auth/signup) before going to the login page
-            window.location.href = "login.html";
+            var nameParts = document.getElementById("fullName").value.trim().split(/\s+/);
+            if (nameParts.length < 2) {
+                message.innerText = "Please enter your first and last name";
+                return;
+            }
+
+            var response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    first_name: nameParts[0],
+                    last_name: nameParts.slice(1).join(" "),
+                    email: email,
+                    password: password,
+                    date_of_birth: document.getElementById("dateOfBirth").value,
+                    gender: document.getElementById("gender").value,
+                    major: document.getElementById("major").value,
+                    phone_number: null
+                })
+            });
+            var result = await response.json();
+            if (!response.ok) {
+                message.innerText = result.error || "Unable to create account";
+                return;
+            }
+            window.location.href = "dashboard.html";
         });
     </script>
 </body>

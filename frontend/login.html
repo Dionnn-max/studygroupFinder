@@ -251,10 +251,21 @@
     <script>
         var form = document.getElementById("loginForm");
 
-        form.addEventListener("submit", function(e) {
+        form.addEventListener("submit", async function(e) {
             e.preventDefault();
-
-            // TODO: check the email and password with the backend (POST /api/auth/login) first
+            var response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: document.getElementById("email").value.trim(),
+                    password: document.getElementById("password").value
+                })
+            });
+            var result = await response.json();
+            if (!response.ok) {
+                document.getElementById("message").innerText = result.error || "Unable to log in";
+                return;
+            }
             window.location.href = "dashboard.html";
         });
     </script>
