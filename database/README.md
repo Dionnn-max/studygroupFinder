@@ -50,3 +50,7 @@ I think what we need to get out of the way ASAP is getting Flask connected to My
 3. Run `study_group_finder_sample_data.sql` once on a fresh database.
 4. Connect Flask to the resulting study_group_finder schema.
 
+IMPORTANT!!!!
+
+The new v2 files are configured for local MySQL development and use the 'study_group_finder' database. Meaning they're not the Aiven-specific scripts. The 
+shared Aiven database uses 'defaultdb'; connect it through the backend's environment-based configuration. Also, pls don't commit database passwords or .env files.
